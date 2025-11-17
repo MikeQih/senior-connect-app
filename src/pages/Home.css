@@ -1,0 +1,152 @@
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FF9913 0%, #FF6E00 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.5s ease-out;
+}
+
+.logo {
+  max-width: 400px;
+  width: 90%;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+}
+
+.welcome-text {
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.5s ease-out 0.5s;
+}
+
+.welcome-text h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-text p {
+  font-size: 1.3rem;
+  color: #2d2d44;
+  font-weight: 500;
+}
+
+.button-container {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.5s ease-out 1s;
+}
+
+button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background-color: #1a1a2e;
+  color: #FFBD31;
+}
+
+.btn-primary:hover {
+  background-color: #2d2d44;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #FF6E00;
+}
+
+.btn-secondary:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Fade-in state */
+.fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.fade-in-delay {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.fade-in-delay-2 {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .welcome-text h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-text p {
+    font-size: 1.1rem;
+  }
+
+  .logo {
+    max-width: 300px;
+  }
+
+  button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .welcome-text p {
+    font-size: 1rem;
+  }
+
+  .logo {
+    max-width: 250px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}
