@@ -1,10 +1,42 @@
 .home-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FF9913 0%, #FF6E00 100%);
+  background: #FCD97B;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  position: relative;
+}
+
+/* Decorative ellipses */
+.home-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle,
+    rgba(255, 120, 70, 0.6) 0%,
+    rgba(250, 130, 90, 0.45) 40%,
+    rgba(255, 150, 110, 0.25) 70%,
+    transparent 100%);
+  border-radius: 50%;
+}
+
+.home-container::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle,
+    rgba(220, 100, 60, 0.55) 0%,
+    rgba(235, 110, 70, 0.4) 40%,
+    rgba(250, 130, 85, 0.22) 70%,
+    transparent 100%);
+  border-radius: 50%;
 }
 
 .content-wrapper {
@@ -12,6 +44,8 @@
   padding: 2rem;
   max-width: 800px;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .logo-container {
@@ -25,7 +59,7 @@
   max-width: 400px;
   width: 90%;
   height: auto;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
 }
 
 .welcome-text {
