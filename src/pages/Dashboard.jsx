@@ -20,8 +20,8 @@ function Dashboard() {
 
   const handleSettings = () => {
     setSelectedOption('settings');
-    // Navigate to settings page or show settings content
-    console.log('Settings selected');
+    // Navigate to settings page
+    navigate('/settings');
   };
 
   return (
