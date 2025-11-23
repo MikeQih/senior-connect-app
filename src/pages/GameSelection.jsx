@@ -34,11 +34,6 @@ function GameSelection() {
 
   const handleGameClick = (gameId) => {
     setSelectedGame(gameId);
-    // Navigate to the game's tutorial page
-    const game = games.find(g => g.id === gameId);
-    if (game) {
-      navigate(game.route);
-    }
   };
 
   const handleConfirm = () => {

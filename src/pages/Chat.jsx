@@ -73,11 +73,7 @@ function Chat() {
               <div
                 key={contact.name}
                 className={`contact-card ${highlightedContact === contact.name ? 'highlighted' : ''}`}
-                onClick={() => {
-                  setHighlightedContact(contact.name);
-                  setSelectedContact(contact.name);
-                  setView('conversation');
-                }}
+                onClick={() => setHighlightedContact(contact.name)}
               >
                 <img src={contact.image} alt={contact.name} className="contact-large-avatar" />
                 <button className={`contact-btn ${highlightedContact === contact.name ? 'active' : ''}`}>

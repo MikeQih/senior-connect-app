@@ -6,22 +6,18 @@ function Dashboard() {
   const [selectedOption, setSelectedOption] = useState('play');
   const navigate = useNavigate();
 
-  const handlePlay = () => {
-    setSelectedOption('play');
-    // Navigate to game selection page
-    navigate('/game/select');
+  const handleSelect = (option) => {
+    setSelectedOption(option);
   };
 
-  const handleChat = () => {
-    setSelectedOption('chat');
-    // Navigate to chat page
-    navigate('/chat');
-  };
-
-  const handleSettings = () => {
-    setSelectedOption('settings');
-    // Navigate to settings page
-    navigate('/settings');
+  const handleConfirm = () => {
+    if (selectedOption === 'play') {
+      navigate('/game/select');
+    } else if (selectedOption === 'chat') {
+      navigate('/chat');
+    } else if (selectedOption === 'settings') {
+      navigate('/settings');
+    }
   };
 
   return (
@@ -30,7 +26,7 @@ function Dashboard() {
       <div className="dashboard-content">
         <button
           className={`menu-btn ${selectedOption === 'play' ? 'selected' : ''}`}
-          onClick={handlePlay}
+          onClick={() => handleSelect('play')}
         >
           <img src="/Resources/ModelD/Console.png" alt="Play" className="btn-icon" />
           <span className="btn-text">Play</span>
@@ -38,7 +34,7 @@ function Dashboard() {
 
         <button
           className={`menu-btn ${selectedOption === 'chat' ? 'selected' : ''}`}
-          onClick={handleChat}
+          onClick={() => handleSelect('chat')}
         >
           <img src="/Resources/ModelD/Messenger.png" alt="Chat" className="btn-icon" />
           <span className="btn-text">Chat</span>
@@ -46,7 +42,7 @@ function Dashboard() {
 
         <button
           className={`menu-btn ${selectedOption === 'settings' ? 'selected' : ''}`}
-          onClick={handleSettings}
+          onClick={() => handleSelect('settings')}
         >
           <img src="/Resources/ModelD/Setting.png" alt="Settings" className="btn-icon" />
           <span className="btn-text">Settings</span>
@@ -60,7 +56,7 @@ function Dashboard() {
           <span className="hint-text">CHOOSE</span>
         </div>
         <div className="hint-item">
-          <span className="control-btn">A</span>
+          <span className="control-btn" onClick={handleConfirm}>A</span>
           <span className="hint-text">CONFIRM</span>
         </div>
         <div className="hint-item">
