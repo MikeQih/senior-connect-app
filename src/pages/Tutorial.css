@@ -1,0 +1,209 @@
+.tutorial-container {
+  min-height: 100vh;
+  background: #FCD97B;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative ellipses */
+.tutorial-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle,
+    rgba(255, 120, 70, 0.6) 0%,
+    rgba(250, 130, 90, 0.45) 40%,
+    rgba(255, 150, 110, 0.25) 70%,
+    transparent 100%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.tutorial-container::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle,
+    rgba(220, 100, 60, 0.55) 0%,
+    rgba(235, 110, 70, 0.4) 40%,
+    rgba(250, 130, 85, 0.22) 70%,
+    transparent 100%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.tutorial-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  gap: 2rem;
+}
+
+.tutorial-image-wrapper {
+  max-width: 600px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.tutorial-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.tutorial-navigation {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.nav-arrow {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-arrow:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.current-page {
+  color: #E8824A;
+}
+
+.page-separator {
+  color: #666;
+}
+
+.total-pages {
+  color: #666;
+}
+
+/* Control hints */
+.control-hints {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 1rem;
+}
+
+.hint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(200, 200, 200, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tutorial-image-wrapper {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .tutorial-navigation {
+    gap: 1.5rem;
+  }
+
+  .nav-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .page-indicator {
+    font-size: 1.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tutorial-content {
+    padding: 1rem;
+  }
+
+  .nav-arrow {
+    width: 45px;
+    height: 45px;
+  }
+
+  .page-indicator {
+    font-size: 1.2rem;
+    padding: 0.6rem 1.2rem;
+  }
+}

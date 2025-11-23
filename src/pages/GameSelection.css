@@ -1,0 +1,244 @@
+.game-selection-container {
+  min-height: 100vh;
+  background: #FCD97B;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative ellipses */
+.game-selection-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle,
+    rgba(255, 120, 70, 0.6) 0%,
+    rgba(250, 130, 90, 0.45) 40%,
+    rgba(255, 150, 110, 0.25) 70%,
+    transparent 100%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.game-selection-container::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle,
+    rgba(220, 100, 60, 0.55) 0%,
+    rgba(235, 110, 70, 0.4) 40%,
+    rgba(250, 130, 85, 0.22) 70%,
+    transparent 100%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.game-selection-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 2rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Game Display Title */
+.game-display-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Game Display */
+.game-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.game-display-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+/* Game Icons Row */
+.game-icons-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.game-icon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  min-width: 140px;
+}
+
+.game-icon-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.game-icon-card.selected {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(1.2);
+}
+
+.game-icon-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.game-icon-card.selected .game-icon-image {
+  transform: scale(1.1);
+}
+
+.game-icon-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: center;
+  max-width: 150px;
+}
+
+/* Control hints */
+.control-hints {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 1rem;
+}
+
+.hint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(200, 200, 200, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .game-display-title {
+    font-size: 2rem;
+  }
+
+  .game-display {
+    max-width: 400px;
+  }
+
+  .game-display-image {
+    max-height: 300px;
+  }
+
+  .game-icons-row {
+    gap: 1.5rem;
+  }
+
+  .game-icon-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .game-icon-label {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-selection-content {
+    padding: 2rem 1rem 0.5rem;
+  }
+
+  .game-display-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .game-display {
+    max-width: 100%;
+  }
+
+  .game-display-image {
+    max-height: 250px;
+  }
+
+  .game-icons-row {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .game-icon-card {
+    padding: 0.7rem;
+  }
+
+  .game-icon-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .game-icon-label {
+    font-size: 0.75rem;
+    max-width: 90px;
+  }
+}

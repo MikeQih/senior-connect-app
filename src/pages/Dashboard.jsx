@@ -8,8 +8,8 @@ function Dashboard() {
 
   const handlePlay = () => {
     setSelectedOption('play');
-    // Navigate to play page or show play content
-    console.log('Play selected');
+    // Navigate to game selection page
+    navigate('/game/select');
   };
 
   const handleChat = () => {

@@ -126,9 +126,9 @@
   box-shadow: 0 6px 20px rgba(232, 130, 74, 0.4);
 }
 
-/* For Ying - Red background */
+/* For Ying - Green background */
 .contact-card:nth-child(2) .contact-btn.active {
-  background: #E86A6A;
+  background: #6BBF77;
 }
 
 /* For Alice - Green background */
