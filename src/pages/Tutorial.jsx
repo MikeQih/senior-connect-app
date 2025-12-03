@@ -23,6 +23,10 @@ function Tutorial() {
     navigate('/game/select');
   };
 
+  const handleStartGame = () => {
+    navigate('/game/connect4/play');
+  };
+
   return (
     <div className="tutorial-container">
       <div className="tutorial-content">
@@ -57,6 +61,10 @@ function Tutorial() {
             ►
           </button>
         </div>
+
+        <button className="start-game-btn" onClick={handleStartGame}>
+          Start the game
+        </button>
       </div>
 
       {/* Control hints */}

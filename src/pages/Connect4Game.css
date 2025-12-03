@@ -1,0 +1,373 @@
+.connect4-game-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background images */
+.nature-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.background-signal {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600px;
+  height: auto;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.connect4-game-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+  gap: 1.5rem;
+}
+
+/* Round indicator */
+.round-indicator {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.round-indicator span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* Game board */
+.game-board-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board-image {
+  display: none;
+}
+
+/* Column indicators at top */
+.column-indicators {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  z-index: 10;
+}
+
+.column-indicator {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.column-indicator.active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.indicator-ball {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Game grid - Custom board */
+.game-grid {
+  background: linear-gradient(135deg, #5B8A9A 0%, #4A7A8A 100%);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.3),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+/* Decorative scalloped edge effect */
+.game-grid::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  right: 20px;
+  height: 16px;
+  background:
+    radial-gradient(circle at 7% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 21.5% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 36% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 50.5% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 65% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 79.5% 50%, transparent 20px, #5B8A9A 21px),
+    radial-gradient(circle at 94% 50%, transparent 20px, #5B8A9A 21px);
+}
+
+.grid-row {
+  display: flex;
+  gap: 10px;
+}
+
+.grid-cell {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.4) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s;
+  position: relative;
+  overflow: visible;
+}
+
+.grid-cell.highlighted {
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.5) 100%);
+  box-shadow:
+    inset 0 4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.3),
+    0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.ball-piece {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  animation: dropIn 0.4s ease-out;
+  position: absolute;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes dropIn {
+  from {
+    transform: translateY(-700%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Winner message */
+.winner-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 20;
+}
+
+.winner-message h2 {
+  font-size: 2.5rem;
+  color: #1a1a2e;
+  margin: 0 0 1.5rem 0;
+}
+
+.reset-btn {
+  padding: 1rem 2.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: #E8824A;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(232, 130, 74, 0.4);
+  transition: all 0.3s;
+}
+
+.reset-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(232, 130, 74, 0.5);
+}
+
+/* Control hints */
+.control-hints {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 1rem;
+}
+
+.hint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(200, 200, 200, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .round-indicator {
+    top: 1rem;
+    right: 1.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .round-indicator span {
+    font-size: 1.2rem;
+  }
+
+  .game-board-wrapper {
+    max-width: 500px;
+  }
+
+  .grid-cell {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ball-piece {
+    width: 55px;
+    height: 55px;
+  }
+
+  .indicator-ball {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .connect4-game-content {
+    padding: 1rem;
+  }
+
+  .round-indicator {
+    top: 0.5rem;
+    right: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .round-indicator span {
+    font-size: 1rem;
+  }
+
+  .game-board-wrapper {
+    max-width: 100%;
+  }
+
+  .grid-cell {
+    width: 45px;
+    height: 45px;
+  }
+
+  .ball-piece {
+    width: 42px;
+    height: 42px;
+  }
+
+  .game-grid {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .grid-row {
+    gap: 6px;
+  }
+
+  .column-indicators {
+    gap: 6px;
+    height: 50px;
+  }
+
+  .indicator-ball {
+    width: 35px;
+    height: 35px;
+  }
+
+  .winner-message {
+    padding: 1.5rem 2rem;
+  }
+
+  .winner-message h2 {
+    font-size: 2rem;
+  }
+}
