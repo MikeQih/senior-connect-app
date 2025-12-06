@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUIModel } from '../contexts/UIModelContext';
 import './GameSelection.css';
 
 function GameSelection() {
   const [selectedGame, setSelectedGame] = useState('Connect4');
   const navigate = useNavigate();
+  const { uiModel } = useUIModel();
 
   const games = [
     {
@@ -84,7 +86,11 @@ function GameSelection() {
       {/* Control hints */}
       <div className="control-hints">
         <div className="hint-item">
-          <img src="/Resources/ModelD/Arrows.png" alt="Choose" className="control-icon" />
+          <img
+            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+            alt="Choose"
+            className="control-icon"
+          />
           <span className="hint-text">CHOOSE</span>
         </div>
         <div className="hint-item">

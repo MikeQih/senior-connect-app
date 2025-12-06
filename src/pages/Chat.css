@@ -218,7 +218,6 @@
   justify-content: center;
   align-items: center;
   padding: 1.5rem;
-  padding-bottom: 7rem;
   position: relative;
   z-index: 1;
 }
@@ -261,6 +260,85 @@
   width: 60px;
   height: 60px;
   object-fit: contain;
+}
+
+/* Contact Switcher */
+.contact-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.5rem;
+}
+
+.chat-choose-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  transition: transform 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.switcher-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  background: rgba(255, 255, 255, 0.3);
+  min-width: 90px;
+}
+
+.switcher-contact:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.switcher-contact.active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px dashed #1a1a2e;
+}
+
+.switcher-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1a1a2e;
+}
+
+.switcher-contact.active .switcher-avatar {
+  border-color: #4A9B9E;
+  border-width: 3px;
+}
+
+.switcher-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: center;
+}
+
+.online-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  background: #4CAF50;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
 /* Control hints */

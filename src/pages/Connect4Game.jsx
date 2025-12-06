@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUIModel } from '../contexts/UIModelContext';
 import './Connect4Game.css';
 
 function Connect4Game() {
   const navigate = useNavigate();
+  const { uiModel } = useUIModel();
   const [currentPlayer, setCurrentPlayer] = useState('red'); // 'red' or 'yellow'
   const [round, setRound] = useState(1);
   const [board, setBoard] = useState(Array(6).fill(null).map(() => Array(7).fill(null)));
@@ -201,7 +203,11 @@ function Connect4Game() {
       {/* Control hints */}
       <div className="control-hints">
         <div className="hint-item">
-          <img src="/Resources/ModelD/Arrows.png" alt="Choose" className="control-icon" />
+          <img
+            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+            alt="Choose"
+            className="control-icon"
+          />
           <span className="hint-text">CHOOSE COLUMN</span>
         </div>
         <div className="hint-item">

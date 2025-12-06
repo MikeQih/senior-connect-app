@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUIModel } from '../contexts/UIModelContext';
 import './Settings.css';
 
 function Settings() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('profile');
+  const { uiModel, toggleUIModel } = useUIModel();
 
   // Profile settings
   const [name, setName] = useState('');
@@ -203,6 +205,24 @@ function Settings() {
                       onClick={() => setTextSize('Large')}
                     >
                       Large
+                    </button>
+                  </div>
+                </div>
+
+                <div className="accessibility-item">
+                  <label>UI Model</label>
+                  <div className="size-options">
+                    <button
+                      className={`size-btn ${uiModel === 'ModelD' ? 'active' : ''}`}
+                      onClick={() => toggleUIModel('ModelD')}
+                    >
+                      Model D
+                    </button>
+                    <button
+                      className={`size-btn ${uiModel === 'ModelR' ? 'active' : ''}`}
+                      onClick={() => toggleUIModel('ModelR')}
+                    >
+                      Model R
                     </button>
                   </div>
                 </div>

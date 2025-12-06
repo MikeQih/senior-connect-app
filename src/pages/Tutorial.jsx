@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUIModel } from '../contexts/UIModelContext';
 import './Tutorial.css';
 
 function Tutorial() {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 16; // Tutorial images from 1.png to 16.png
   const navigate = useNavigate();
+  const { uiModel } = useUIModel();
 
   const handleNext = () => {
     if (currentPage < totalPages) {
@@ -70,7 +72,11 @@ function Tutorial() {
       {/* Control hints */}
       <div className="control-hints">
         <div className="hint-item">
-          <img src="/Resources/ModelD/Arrows.png" alt="Choose" className="control-icon" />
+          <img
+            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+            alt="Choose"
+            className="control-icon"
+          />
           <span className="hint-text">NAVIGATE</span>
         </div>
         <div className="hint-item">

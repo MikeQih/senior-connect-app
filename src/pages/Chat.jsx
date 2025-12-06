@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUIModel } from '../contexts/UIModelContext';
 import './Chat.css';
 
 function Chat() {
@@ -7,7 +8,9 @@ function Chat() {
   const [selectedContact, setSelectedContact] = useState(null);
   const [highlightedContact, setHighlightedContact] = useState('Alice');
   const [isRecording, setIsRecording] = useState(false);
+  const [rotation, setRotation] = useState(0);
   const navigate = useNavigate();
+  const { uiModel } = useUIModel();
 
   const contacts = [
     { name: 'Ying', image: '/Resources/ModelD/Ying.png' },
@@ -49,6 +52,30 @@ function Chat() {
     }
   };
 
+  // Keyboard controls for contact switching in conversation view (ModelR)
+  useEffect(() => {
+    if (uiModel === 'ModelR' && view === 'conversation') {
+      const handleKeyPress = (e) => {
+        if (e.key === 'ArrowLeft') {
+          // Switch to previous contact
+          const currentIndex = contacts.findIndex(c => c.name === selectedContact);
+          const newIndex = currentIndex > 0 ? currentIndex - 1 : contacts.length - 1;
+          setSelectedContact(contacts[newIndex].name);
+          setRotation(prev => prev - 120); // Rotate counter-clockwise
+        } else if (e.key === 'ArrowRight') {
+          // Switch to next contact
+          const currentIndex = contacts.findIndex(c => c.name === selectedContact);
+          const newIndex = currentIndex < contacts.length - 1 ? currentIndex + 1 : 0;
+          setSelectedContact(contacts[newIndex].name);
+          setRotation(prev => prev + 120); // Rotate clockwise
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyPress);
+      return () => window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [selectedContact, view, uiModel, contacts]);
+
   const handleArrowLeft = () => {
     const currentIndex = contacts.findIndex(c => c.name === highlightedContact);
     const newIndex = currentIndex > 0 ? currentIndex - 1 : contacts.length - 1;
@@ -89,7 +116,11 @@ function Chat() {
         {/* Control hints */}
         <div className="control-hints">
           <div className="hint-item">
-            <img src="/Resources/ModelD/Arrows.png" alt="Choose" className="control-icon" />
+            <img
+              src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+              alt="Choose"
+              className="control-icon"
+            />
             <span className="hint-text">CHOOSE</span>
           </div>
           <div className="hint-item">
@@ -146,19 +177,62 @@ function Chat() {
         </button>
       </div>
 
+      {/* Contact Switcher */}
+      <div className="contact-switcher">
+        {contacts.map((contact, index) => {
+          const currentIndex = contacts.findIndex(c => c.name === selectedContact);
+          return (
+            <div
+              key={contact.name}
+              className={`switcher-contact ${selectedContact === contact.name ? 'active' : ''}`}
+              onClick={() => {
+                if (contact.name !== selectedContact && uiModel === 'ModelR') {
+                  // Calculate rotation direction
+                  const clickedIndex = index;
+                  if (clickedIndex > currentIndex) {
+                    setRotation(prev => prev + 120); // Rotate clockwise
+                  } else {
+                    setRotation(prev => prev - 120); // Rotate counter-clockwise
+                  }
+                }
+                setSelectedContact(contact.name);
+              }}
+            >
+              <img src={contact.image} alt={contact.name} className="switcher-avatar" />
+              <span className="switcher-name">{contact.name}</span>
+              {selectedContact === contact.name && <div className="online-indicator"></div>}
+            </div>
+          );
+        })}
+
+        {/* ChooseIcon for ModelR */}
+        {uiModel === 'ModelR' && (
+          <img
+            src="/Resources/ModelR/ChooseIcon.png"
+            alt="Choose Icon"
+            className="chat-choose-icon"
+            style={{ transform: `rotate(${rotation}deg)` }}
+          />
+        )}
+      </div>
+
       {/* Control hints */}
       <div className="control-hints">
         <div className="hint-item">
-          <img src="/Resources/ModelD/Arrows.png" alt="Choose" className="control-icon" />
+          <img
+            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+            alt="Choose"
+            className="control-icon"
+          />
           <span className="hint-text">CHOOSE</span>
         </div>
         <div className="hint-item">
           <span className="control-btn">A</span>
-          <span className="hint-text">CONFIRM</span>
+          <span className="hint-text">SELECT/RECORD</span>
         </div>
         <div className="hint-item">
           <span className="control-btn" onClick={handleBack}>B</span>
-          <span className="hint-text">BACK</span>
+          <span className="hint-text">BACK/CANCEL</span>
         </div>
       </div>
     </div>
