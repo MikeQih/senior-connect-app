@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUIModel } from '../contexts/UIModelContext';
+import { useController } from '../hardware/ControllerContext';
 import './GameSelection.css';
 
 function GameSelection() {
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
+  const { lastAction, clearAction } = useController();
 
   const games = [
     {
@@ -42,6 +44,9 @@ function GameSelection() {
     navigate('/dashboard');
   };
 
+  // ------------------------------------------
+  // Controller Input Logic (D-pad / Wheel)
+  // ------------------------------------------
   useEffect(() => {
     if (!lastAction?.type) return;
 
@@ -74,8 +79,10 @@ function GameSelection() {
     <div className="game-selection-container">
       <div className="game-selection-content">
 
+        {/* Title */}
         <h1 className="game-display-title">{selectedGame.name}</h1>
 
+        {/* Big game display image */}
         <div className="game-display">
           <img
             src={selectedGame.display}
@@ -84,6 +91,7 @@ function GameSelection() {
           />
         </div>
 
+        {/* Row of game icons */}
         <div className="game-icons-row">
           {games.map((game, index) => (
             <div
@@ -99,11 +107,13 @@ function GameSelection() {
 
       </div>
 
-      {/* Control hints */}
+      {/* Controller Hints */}
       <div className="control-hints">
         <div className="hint-item">
           <img
-            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
+            src={uiModel === 'ModelR'
+              ? '/Resources/ModelR/ChooseIcon.png'
+              : '/Resources/ModelD/Arrows.png'}
             alt="Choose"
             className="control-icon"
           />

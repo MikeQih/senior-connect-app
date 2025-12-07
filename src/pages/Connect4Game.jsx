@@ -1,20 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUIModel } from '../contexts/UIModelContext';
+import { useController } from '../hardware/ControllerContext';
 import './Connect4Game.css';
 
 function Connect4Game() {
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
-  const [currentPlayer, setCurrentPlayer] = useState('red'); // 'red' or 'yellow'
+  const { lastAction, clearAction } = useController();
+
+  const [currentPlayer, setCurrentPlayer] = useState('red');
   const [round, setRound] = useState(1);
-  const [board, setBoard] = useState(Array(6).fill(null).map(() => Array(7).fill(null)));
+  const [board, setBoard] = useState(
+    Array(6).fill(null).map(() => Array(7).fill(null))
+  );
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
-  const [selectedColumn, setSelectedColumn] = useState(3); // Start at middle column
-  const [moveCount, setMoveCount] = useState(0); // Track number of moves
+  const [selectedColumn, setSelectedColumn] = useState(3);
+  const [moveCount, setMoveCount] = useState(0);
 
-  // Keyboard controls
+  // ---------------------------------------
+  // KEYBOARD FALLBACK (still allowed)
+  // ---------------------------------------
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (gameOver) return;
@@ -32,16 +39,48 @@ function Connect4Game() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [selectedColumn, gameOver, currentPlayer, board]);
 
-  // Check if board is full (draw)
-  const isBoardFull = (board) => {
-    return board.every(row => row.every(cell => cell !== null));
-  };
+  // ---------------------------------------
+  // HARDWARE CONTROLLER EVENTS
+  // ---------------------------------------
+  useEffect(() => {
+    if (!lastAction?.type || gameOver) return;
 
-  // Handle dropping a piece
+    const action = lastAction.type;
+
+    if (action === "LEFT") {
+      setSelectedColumn(prev => Math.max(0, prev - 1));
+    }
+
+    if (action === "RIGHT") {
+      setSelectedColumn(prev => Math.min(6, prev + 1));
+    }
+
+    if (action === "A") {
+      clearAction();
+      handleDropPiece();
+      return;
+    }
+
+    if (action === "B") {
+      clearAction();
+      handleBack();
+      return;
+    }
+
+    clearAction();
+  }, [lastAction, gameOver]);
+
+  // ---------------------------------------
+  // Board Helper Functions
+  // ----------------------------------------
+
+  const isBoardFull = board =>
+    board.every(row => row.every(cell => cell !== null));
+
   const handleDropPiece = () => {
     if (gameOver) return;
 
-    // Find the lowest empty row in the selected column
+    // Find lowest empty row
     let rowIndex = -1;
     for (let i = 5; i >= 0; i--) {
       if (board[i][selectedColumn] === null) {
@@ -50,9 +89,8 @@ function Connect4Game() {
       }
     }
 
-    if (rowIndex === -1) return; // Column is full
+    if (rowIndex === -1) return; // Column full
 
-    // Place the piece
     const newBoard = board.map(row => [...row]);
     newBoard[rowIndex][selectedColumn] = currentPlayer;
     setBoard(newBoard);
@@ -60,49 +98,50 @@ function Connect4Game() {
     const newMoveCount = moveCount + 1;
     setMoveCount(newMoveCount);
 
-    // Check for winner
+    // Win check
     if (checkWinner(newBoard, rowIndex, selectedColumn, currentPlayer)) {
-      setGameOver(true);
       setWinner(currentPlayer);
-    } else if (isBoardFull(newBoard)) {
-      // Check for draw
       setGameOver(true);
-      setWinner('draw');
-    } else {
-      // Switch player and update round after both players have moved
-      const nextPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
-      setCurrentPlayer(nextPlayer);
+      return;
+    }
 
-      // Increment round after yellow's turn (both players have moved)
-      if (nextPlayer === 'red') {
-        setRound(round + 1);
-      }
+    // Draw check
+    if (isBoardFull(newBoard)) {
+      setWinner('draw');
+      setGameOver(true);
+      return;
+    }
+
+    // Switch turn
+    const nextPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+    setCurrentPlayer(nextPlayer);
+
+    // If yellow played → new round
+    if (nextPlayer === 'red') {
+      setRound(prev => prev + 1);
     }
   };
 
-  // Check if current move results in a win
+  // Check win conditions
   const checkWinner = (board, row, col, player) => {
-    // Check horizontal
+    // Horizontal
     let count = 1;
-    // Check left
     for (let c = col - 1; c >= 0 && board[row][c] === player; c--) count++;
-    // Check right
     for (let c = col + 1; c < 7 && board[row][c] === player; c++) count++;
     if (count >= 4) return true;
 
-    // Check vertical
+    // Vertical
     count = 1;
-    // Check down
     for (let r = row + 1; r < 6 && board[r][col] === player; r++) count++;
     if (count >= 4) return true;
 
-    // Check diagonal (top-left to bottom-right)
+    // Diagonal TL-BR
     count = 1;
     for (let i = 1; row - i >= 0 && col - i >= 0 && board[row - i][col - i] === player; i++) count++;
     for (let i = 1; row + i < 6 && col + i < 7 && board[row + i][col + i] === player; i++) count++;
     if (count >= 4) return true;
 
-    // Check diagonal (bottom-left to top-right)
+    // Diagonal BL-TR
     count = 1;
     for (let i = 1; row + i < 6 && col - i >= 0 && board[row + i][col - i] === player; i++) count++;
     for (let i = 1; row - i >= 0 && col + i < 7 && board[row - i][col + i] === player; i++) count++;
@@ -114,11 +153,11 @@ function Connect4Game() {
   const handleReset = () => {
     setBoard(Array(6).fill(null).map(() => Array(7).fill(null)));
     setCurrentPlayer('red');
-    setGameOver(false);
-    setWinner(null);
-    setRound(1); // Reset to Round 1 for new game
+    setRound(1);
     setMoveCount(0);
     setSelectedColumn(3);
+    setWinner(null);
+    setGameOver(false);
   };
 
   const handleBack = () => {
@@ -131,32 +170,30 @@ function Connect4Game() {
 
   return (
     <div className="connect4-game-container">
-      {/* Background images */}
-      <img src="/Resources/Game/Connect4/NatureBackground.png" alt="Background" className="nature-background" />
-      <img src="/Resources/Game/Connect4/BackgroundSignal.png" alt="Signal" className="background-signal" />
+      <img src="/Resources/Game/Connect4/NatureBackground.png" className="nature-background" />
+      <img src="/Resources/Game/Connect4/BackgroundSignal.png" className="background-signal" />
 
       <div className="connect4-game-content">
-        {/* Round indicator */}
+
+        {/* Round indicator*/}
         <div className="round-indicator">
           <span>Round {round}</span>
         </div>
 
-        {/* Game board */}
+        {/* Game Board */}
         <div className="game-board-wrapper">
-          <img src="/Resources/Game/Connect4/Connect4SetBoard.png" alt="Board" className="board-image" />
+          <img src="/Resources/Game/Connect4/Connect4SetBoard.png" className="board-image" />
 
-          {/* Column selection indicators */}
           <div className="column-indicators">
-            {[0, 1, 2, 3, 4, 5, 6].map((colIndex) => (
+            {[0,1,2,3,4,5,6].map(col => (
               <div
-                key={colIndex}
-                className={`column-indicator ${selectedColumn === colIndex ? 'active' : ''}`}
-                onClick={() => handleColumnSelect(colIndex)}
+                key={col}
+                className={`column-indicator ${selectedColumn === col ? 'active' : ''}`}
+                onClick={() => handleColumnSelect(col)}
               >
-                {selectedColumn === colIndex && !gameOver && (
+                {selectedColumn === col && !gameOver && (
                   <img
                     src={`/Resources/Game/Connect4/${currentPlayer === 'red' ? 'RedBall' : 'YellowBall'}.png`}
-                    alt={currentPlayer}
                     className="indicator-ball"
                   />
                 )}
@@ -166,17 +203,16 @@ function Connect4Game() {
 
           {/* Game grid with pieces */}
           <div className="game-grid">
-            {board.map((row, rowIndex) => (
-              <div key={rowIndex} className="grid-row">
-                {row.map((cell, colIndex) => (
+            {board.map((row, rIdx) => (
+              <div className="grid-row" key={rIdx}>
+                {row.map((cell, cIdx) => (
                   <div
-                    key={colIndex}
-                    className={`grid-cell ${selectedColumn === colIndex ? 'highlighted' : ''}`}
+                    key={cIdx}
+                    className={`grid-cell ${selectedColumn === cIdx ? 'highlighted' : ''}`}
                   >
                     {cell && (
                       <img
                         src={`/Resources/Game/Connect4/${cell === 'red' ? 'RedBall' : 'YellowBall'}.png`}
-                        alt={cell}
                         className="ball-piece"
                       />
                     )}
@@ -204,16 +240,19 @@ function Connect4Game() {
       <div className="control-hints">
         <div className="hint-item">
           <img
-            src={uiModel === 'ModelR' ? '/Resources/ModelR/ChooseIcon.png' : '/Resources/ModelD/Arrows.png'}
-            alt="Choose"
+            src={uiModel === 'ModelR'
+              ? '/Resources/ModelR/ChooseIcon.png'
+              : '/Resources/ModelD/Arrows.png'}
             className="control-icon"
           />
           <span className="hint-text">CHOOSE COLUMN</span>
         </div>
+
         <div className="hint-item">
           <span className="control-btn" onClick={handleDropPiece}>A</span>
           <span className="hint-text">DROP PIECE</span>
         </div>
+
         <div className="hint-item">
           <span className="control-btn" onClick={handleBack}>B</span>
           <span className="hint-text">BACK</span>
