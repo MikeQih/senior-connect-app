@@ -1,122 +1,86 @@
-html, body, #root {
+.mp-container {
+  width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.tutorial-container {
-  height: 100%;
-  min-height: 100%;
+  background: #FCD97B;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  position: relative;
 }
 
-.tutorial-content {
-  display: flex;
-  flex-direction: column;
+.mp-content {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.tutorial-content.blurred {
+.blurred {
   filter: blur(4px);
   pointer-events: none;
 }
 
-.tutorial-header {
-  flex-shrink: 0;
+.mp-header {
+  margin-bottom: 1rem;
   text-align: center;
-  padding-top: 2vh;
+  font-size: 2.4rem;   
 }
 
-.tutorial-container h1 {
-  font-size: 6vh;  
-  font-weight: 800;
-  margin: 0;
-}
-
-.tutorial-container p {
-  font-size: 2.5vh;
-  margin: 0.7vh 0 0;
-}
-
-/* Card area */
-.deck-wrapper {
-  flex-grow: 1;
+.mp-grid-wrapper {
+  width: 100%;
+  height: calc(100% - 180px);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2vh 2vw 3vh;
-  overflow: hidden;
 }
 
-.deck {
+.mp-grid {
   display: grid;
-  gap: 1.2vh;
-  list-style: none;
-  padding: 0;
-  margin: 0;
   justify-content: center;
   align-content: center;
-  place-items: center;
+  gap: 1rem;
+  list-style: none;
 }
 
-.card {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.level-1 .card {
-  height: calc(55vh / var(--rows)); 
-}
-
-.level-2 .card {
-  height: calc(55vh / var(--rows));
-}
-
-.level-3 .card {
-  height: calc(50vh / var(--rows)); 
-}
-
-.level-4 .card {
-  height: calc(60vh / var(--rows)); 
-}
-
-.level-5 .card {
-  height: calc(50vh / var(--rows)); 
-}
-
-.restart-btn {
-  margin-top: 0;
-  margin-bottom: 2vh;
-  background-color: #491B6D;
-  color: white;
-  border: none;
-  padding: 1.8vh 3vw;
+.mp-card {
   border-radius: 12px;
-  font-size: 2.5vh;
-  font-weight: 700;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
   cursor: pointer;
 }
 
-.restart-btn:hover {
-  background-color: #5c238a;
+.mp-card.open {
+  transform: scale(1.05);
+}
+
+.mp-card.matched {
+  opacity: 0.7;
+}
+
+.mp-card.cursor {
+  outline: 5px solid orange;
+  outline-offset: -5px;
+  border-radius: 12px;
+  transition: outline 0.15s ease-in-out;
+  background-color: #E8824A;
+}
+
+.mp-restart {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  background: #E8824A;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .mp-modal-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
@@ -139,12 +103,12 @@ html, body, #root {
 
 .mp-modal h2 {
   margin-bottom: 1.5vh;
-  font-size: 4vh;     
+  font-size: 6vh;     
 }
 
 .mp-modal p {
   margin: 1vh 0;
-  font-size: 2.8vh;
+  font-size: 4vh;
 }
 
 .mp-modal-buttons {
@@ -163,15 +127,6 @@ html, body, #root {
   font-weight: 800;
 }
 
-.mp-modal-buttons button.primary {
-  background: #f4a623;
-  color: #1f2a3c;
-}
-
-.mp-modal-buttons button.primary:hover {
-  background: #ffb94a;
-}
-
 .mp-modal-buttons button:not(.primary) {
   background: #ffffff;
   color: #1f2a3c;
@@ -179,5 +134,12 @@ html, body, #root {
 }
 
 .mp-modal-buttons button:not(.primary):hover {
-  background: #f0f0f0;
+  background: #ffb94a;
+}
+
+.mp-modal button.cursor {
+  outline: 4px solid orange;
+  outline-offset: 2px;
+  border-radius: 6px;
+  background-color: rgba(255,165,0,0.2);
 }

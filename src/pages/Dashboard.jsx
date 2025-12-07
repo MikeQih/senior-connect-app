@@ -1,53 +1,60 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUIModel } from '../contexts/UIModelContext';
+import { useController } from '../hardware/ControllerContext';
 import './Dashboard.css';
 
 function Dashboard() {
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
+  const { lastAction, sendAction, clearAction } = useController();
+  const [ selectedOption, setSelectedOption ] = useState('play');
 
-  // Track selected option
-  const [selectedOption, setSelectedOption] = useState('play');
+  useEffect(() => {
+  if (!lastAction || !lastAction.type) return;
 
-  // Handle confirm (A button)
+  const action = lastAction.type;
+
+  if (action === "UP") {
+    setSelectedOption(prev =>
+      prev === "play" ? "settings" :
+      prev === "settings" ? "chat" :
+      "play"
+    );
+  }
+
+  if (action === "DOWN") {
+    setSelectedOption(prev =>
+      prev === "play" ? "chat" :
+      prev === "chat" ? "settings" :
+      "play"
+    );
+  }
+
+  if (action === "A") {
+    clearAction();
+    setTimeout(() => handleConfirm(), 0);
+    return;
+  }
+
+  clearAction();
+
+}, [lastAction]);
+
+
   const handleConfirm = () => {
     if (selectedOption === 'play') navigate('/game/select');
     if (selectedOption === 'chat') navigate('/chat');
     if (selectedOption === 'settings') navigate('/settings');
   };
 
-  // Keyboard (ModelR)
-  useEffect(() => {
-    if (uiModel !== "ModelR") return;
-
-    const handleKeyPress = (e) => {
-      if (e.key === 'ArrowRight') {
-        if (selectedOption === 'play') setSelectedOption('settings');
-        else if (selectedOption === 'settings') setSelectedOption('chat');
-        else if (selectedOption === 'chat') setSelectedOption('play');
-      }
-      else if (e.key === 'ArrowLeft') {
-        if (selectedOption === 'play') setSelectedOption('chat');
-        else if (selectedOption === 'chat') setSelectedOption('settings');
-        else if (selectedOption === 'settings') setSelectedOption('play');
-      }
-      else if (e.key === 'a' || e.key === ' ') {
-        handleConfirm();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-
-  }, [selectedOption, uiModel]);
-
-  // MODEL D ----------------------------
+  // MODEL D UI
   if (uiModel === "ModelD") {
     return (
       <div className="dashboard-container">
 
         <div className="dashboard-content">
+
           <button
             className={`menu-btn ${selectedOption === 'play' ? 'selected' : ''}`}
             onClick={() => setSelectedOption('play')}
@@ -73,6 +80,7 @@ function Dashboard() {
           </button>
         </div>
 
+        {/* Control hints */}
         <div className="control-hints">
           <div className="hint-item">
             <img src="/Resources/ModelD/Arrows.png" className="control-icon" />
@@ -94,7 +102,7 @@ function Dashboard() {
     );
   }
 
-  // MODEL R ----------------------------
+  // MODEL R UI
   return (
     <div className="dashboard-container">
       <div className="dashboard-content">
@@ -105,8 +113,8 @@ function Dashboard() {
               selectedOption === "play"
                 ? "/Resources/ModelR/ClickWheelPlay.png"
                 : selectedOption === "chat"
-                ? "/Resources/ModelR/ClickWheelChat.png"
-                : "/Resources/ModelR/ClickWheelSetting.png"
+                  ? "/Resources/ModelR/ClickWheelChat.png"
+                  : "/Resources/ModelR/ClickWheelSetting.png"
             }
             className="click-wheel"
           />
