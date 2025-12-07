@@ -4,7 +4,6 @@ import { useUIModel } from '../contexts/UIModelContext';
 import './Dashboard.css';
 
 function Dashboard() {
-  const [selectedOption, setSelectedOption] = useState('play');
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
 

@@ -6,7 +6,8 @@ html, body, #root {
 }
 
 .tutorial-container {
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

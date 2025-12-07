@@ -1,4 +1,20 @@
 /* Global app styles */
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-screen {
+  height: 60vh;   
+  overflow: auto;
+}
+
+.bottom-screen {
+  height: 40vh; 
+  background: #fcd97b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUIModel } from '../contexts/UIModelContext';
 import './GameSelection.css';
 
 function GameSelection() {
-  const [selectedGame, setSelectedGame] = useState('Connect4');
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
 
@@ -14,7 +13,7 @@ function GameSelection() {
       name: 'Matching Pairs',
       icon: '/Resources/Game/MatchingPairs/MatchingPairsIcon.png',
       display: '/Resources/Game/MatchingPairs/MatchingPairsDisplay.png',
-      route: '/game/matchingpairs/tutorial'
+      route: '/game/matchingpairs'
     },
     {
       id: 'Solitaire',
@@ -26,61 +25,78 @@ function GameSelection() {
     {
       id: 'Connect4',
       name: 'Connect 4',
-      icon: '/Resources/Game/Connect4/Connect4Display.png',
-      display: '/Resources/Game/Connect4/Connect4Icon.png',
+      icon: '/Resources/Game/Connect4/Connect4Icon.png',
+      display: '/Resources/Game/Connect4/Connect4Display.png',
       route: '/game/connect4/tutorial'
     }
   ];
 
-  const currentGame = games.find(game => game.id === selectedGame);
-
-  const handleGameClick = (gameId) => {
-    setSelectedGame(gameId);
-  };
+  const [focusIndex, setFocusIndex] = useState(0);
+  const selectedGame = games[focusIndex];
 
   const handleConfirm = () => {
-    const game = games.find(g => g.id === selectedGame);
-    if (game) {
-      navigate(game.route);
-    }
+    navigate(selectedGame.route);
   };
 
   const handleBack = () => {
     navigate('/dashboard');
   };
 
+  useEffect(() => {
+    if (!lastAction?.type) return;
+
+    const action = lastAction.type;
+
+    if (action === "LEFT") {
+      setFocusIndex(prev => (prev - 1 + games.length) % games.length);
+    }
+
+    if (action === "RIGHT") {
+      setFocusIndex(prev => (prev + 1) % games.length);
+    }
+
+    if (action === "A") {
+      clearAction();
+      handleConfirm();
+      return;
+    }
+
+    if (action === "B") {
+      clearAction();
+      handleBack();
+      return;
+    }
+
+    clearAction();
+  }, [lastAction]);
+
   return (
     <div className="game-selection-container">
       <div className="game-selection-content">
-        {/* Game Display Title */}
-        <h1 className="game-display-title">{currentGame?.name}</h1>
 
-        {/* Game Display Image */}
+        <h1 className="game-display-title">{selectedGame.name}</h1>
+
         <div className="game-display">
           <img
-            src={currentGame?.display}
-            alt={currentGame?.name}
+            src={selectedGame.display}
+            alt={selectedGame.name}
             className="game-display-image"
           />
         </div>
 
-        {/* Game Icons */}
         <div className="game-icons-row">
-          {games.map((game) => (
+          {games.map((game, index) => (
             <div
               key={game.id}
-              className={`game-icon-card ${selectedGame === game.id ? 'selected' : ''}`}
-              onClick={() => handleGameClick(game.id)}
+              className={`game-icon-card ${focusIndex === index ? 'selected' : ''}`}
+              onClick={() => setFocusIndex(index)}
             >
-              <img
-                src={game.icon}
-                alt={game.name}
-                className="game-icon-image"
-              />
+              <img src={game.icon} className="game-icon-image" />
               <span className="game-icon-label">{game.name}</span>
             </div>
           ))}
         </div>
+
       </div>
 
       {/* Control hints */}
@@ -93,12 +109,14 @@ function GameSelection() {
           />
           <span className="hint-text">CHOOSE</span>
         </div>
+
         <div className="hint-item">
-          <span className="control-btn" onClick={handleConfirm}>A</span>
-          <span className="hint-text">SELECT/RECORD</span>
+          <span className="control-btn">A</span>
+          <span className="hint-text">SELECT</span>
         </div>
+
         <div className="hint-item">
-          <span className="control-btn" onClick={handleBack}>B</span>
+          <span className="control-btn">B</span>
           <span className="hint-text">BACK</span>
         </div>
       </div>
