@@ -19,9 +19,10 @@ function Connect4Game() {
   const [selectedColumn, setSelectedColumn] = useState(3);
   const [moveCount, setMoveCount] = useState(0);
 
-  // ---------------------------------------
-  // KEYBOARD FALLBACK (still allowed)
-  // ---------------------------------------
+  const [exitModal, setExitModal] = useState(false);
+  const [exitCursor, setExitCursor] = useState(0); // 0 = Yes, 1 = No
+  const [modalCursor, setModalCursor] = useState(0); // 0 = Play Again, 1 = Return to Menu
+
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (gameOver) return;
@@ -39,14 +40,44 @@ function Connect4Game() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [selectedColumn, gameOver, currentPlayer, board]);
 
-  // ---------------------------------------
-  // HARDWARE CONTROLLER EVENTS
-  // ---------------------------------------
   useEffect(() => {
-    if (!lastAction?.type || gameOver) return;
-
+    if (!lastAction?.type) return;
     const action = lastAction.type;
 
+    // EXIT MODAL
+    if (exitModal) {
+      if (action === "UP" || action === "DOWN") {
+        setExitCursor(prev => (prev === 0 ? 1 : 0));
+      }
+      if (action === "A") {
+        if (exitCursor === 0) navigate("/game/select");
+        if (exitCursor === 1) setExitModal(false);
+      }
+      clearAction();
+      return;
+    }
+
+    // WIN MODAL
+    if (gameOver) {
+      if (action === "UP" || action === "DOWN") {
+        setModalCursor(prev => (prev === 0 ? 1 : 0));
+      }
+
+      if (action === "A") {
+        if (modalCursor === 0) handleReset();
+        if (modalCursor === 1) navigate("/game/select");
+      }
+
+      if (action === "B") {
+        setExitModal(true);
+        setExitCursor(0);
+      }
+
+      clearAction();
+      return;
+    }
+
+    // NORMAL GAMEPLAY CONTROLS
     if (action === "LEFT") {
       setSelectedColumn(prev => Math.max(0, prev - 1));
     }
@@ -56,31 +87,24 @@ function Connect4Game() {
     }
 
     if (action === "A") {
-      clearAction();
       handleDropPiece();
-      return;
     }
 
     if (action === "B") {
-      clearAction();
-      handleBack();
-      return;
+      setExitModal(true);
+      setExitCursor(0);
     }
 
     clearAction();
-  }, [lastAction, gameOver]);
+  }, [lastAction, gameOver, exitModal, modalCursor, selectedColumn]);
 
-  // ---------------------------------------
-  // Board Helper Functions
-  // ----------------------------------------
-
+  // GAME LOGIC FUNCTIONS
   const isBoardFull = board =>
     board.every(row => row.every(cell => cell !== null));
 
   const handleDropPiece = () => {
     if (gameOver) return;
 
-    // Find lowest empty row
     let rowIndex = -1;
     for (let i = 5; i >= 0; i--) {
       if (board[i][selectedColumn] === null) {
@@ -95,37 +119,32 @@ function Connect4Game() {
     newBoard[rowIndex][selectedColumn] = currentPlayer;
     setBoard(newBoard);
 
-    const newMoveCount = moveCount + 1;
-    setMoveCount(newMoveCount);
+    setMoveCount(prev => prev + 1);
 
-    // Win check
     if (checkWinner(newBoard, rowIndex, selectedColumn, currentPlayer)) {
       setWinner(currentPlayer);
       setGameOver(true);
       return;
     }
 
-    // Draw check
     if (isBoardFull(newBoard)) {
       setWinner('draw');
       setGameOver(true);
       return;
     }
 
-    // Switch turn
     const nextPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
     setCurrentPlayer(nextPlayer);
 
-    // If yellow played → new round
     if (nextPlayer === 'red') {
       setRound(prev => prev + 1);
     }
   };
 
-  // Check win conditions
   const checkWinner = (board, row, col, player) => {
-    // Horizontal
     let count = 1;
+
+    // Horizontal
     for (let c = col - 1; c >= 0 && board[row][c] === player; c--) count++;
     for (let c = col + 1; c < 7 && board[row][c] === player; c++) count++;
     if (count >= 4) return true;
@@ -158,14 +177,7 @@ function Connect4Game() {
     setSelectedColumn(3);
     setWinner(null);
     setGameOver(false);
-  };
-
-  const handleBack = () => {
-    navigate('/game/connect4/tutorial');
-  };
-
-  const handleColumnSelect = (colIndex) => {
-    setSelectedColumn(colIndex);
+    setModalCursor(0);
   };
 
   return (
@@ -174,22 +186,17 @@ function Connect4Game() {
       <img src="/Resources/Game/Connect4/BackgroundSignal.png" className="background-signal" />
 
       <div className="connect4-game-content">
-
-        {/* Round indicator*/}
         <div className="round-indicator">
           <span>Round {round}</span>
         </div>
 
-        {/* Game Board */}
         <div className="game-board-wrapper">
-          <img src="/Resources/Game/Connect4/Connect4SetBoard.png" className="board-image" />
-
           <div className="column-indicators">
             {[0,1,2,3,4,5,6].map(col => (
               <div
                 key={col}
                 className={`column-indicator ${selectedColumn === col ? 'active' : ''}`}
-                onClick={() => handleColumnSelect(col)}
+                onClick={() => setSelectedColumn(col)}
               >
                 {selectedColumn === col && !gameOver && (
                   <img
@@ -201,7 +208,6 @@ function Connect4Game() {
             ))}
           </div>
 
-          {/* Game grid with pieces */}
           <div className="game-grid">
             {board.map((row, rIdx) => (
               <div className="grid-row" key={rIdx}>
@@ -223,20 +229,61 @@ function Connect4Game() {
           </div>
         </div>
 
-        {/* Winner message */}
+        {/* WINNER MODAL */}
         {gameOver && (
-          <div className="winner-message">
-            <h2>
-              {winner === 'draw'
-                ? "It's a Draw!"
-                : `${winner === 'red' ? 'Red' : 'Yellow'} Wins!`}
-            </h2>
-            <button className="reset-btn" onClick={handleReset}>Play Again</button>
+          <div className="winner-modal-overlay">
+            <div className="winner-modal">
+              <h2>
+                {winner === 'draw'
+                  ? "It's a Draw!"
+                  : `${winner === 'red' ? 'Red' : 'Yellow'} Wins!`}
+              </h2>
+
+              <div className="winner-options">
+                <button
+                  className={modalCursor === 0 ? "cursor" : ""}
+                  onClick={handleReset}
+                >
+                  Play Again
+                </button>
+
+                <button
+                  className={modalCursor === 1 ? "cursor" : ""}
+                  onClick={() => navigate("/game/select")}
+                >
+                  ⬅ Return to Menu
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Control hints */}
+      {/* EXIT MODAL */}
+      {exitModal && (
+        <div className="exit-modal-overlay">
+          <div className="exit-modal">
+            <h2>Exit Game?</h2>
+            <div className="exit-options">
+              <button
+                className={exitCursor === 0 ? "cursor" : ""}
+                onClick={() => navigate('/game/select')}
+              >
+                Yes — Quit
+              </button>
+
+              <button
+                className={exitCursor === 1 ? "cursor" : ""}
+                onClick={() => setExitModal(false)}
+              >
+                No — Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HARDWARE HINTS */}
       <div className="control-hints">
         <div className="hint-item">
           <img
@@ -254,7 +301,7 @@ function Connect4Game() {
         </div>
 
         <div className="hint-item">
-          <span className="control-btn" onClick={handleBack}>B</span>
+          <span className="control-btn" onClick={() => setExitModal(true)}>B</span>
           <span className="hint-text">BACK</span>
         </div>
       </div>

@@ -211,24 +211,60 @@
   }
 }
 
-/* Winner message */
-.winner-message {
+.winner-modal-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 2rem 3rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 900;
 }
 
-.winner-message h2 {
-  font-size: 2.5rem;
+.winner-modal {
+  background: white;
+  padding: 50px 60px;
+  height: auto;
+  width: 500px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+}
+
+.winner-modal h2 {
+  font-size: 3rem;
+  margin-bottom: 30px;
   color: #1a1a2e;
-  margin: 0 0 1.5rem 0;
+}
+
+/* VERTICAL BUTTONS */
+.winner-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.winner-options button {
+  width: 100%;
+  padding: 20px 0;
+  border-radius: 10px;
+  font-size: 2rem;
+  background: #f1f1f1;
+  color: #1a1a2e;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* HARDWARE CURSOR SELECTION */
+.winner-options button.cursor {
+  background: rgba(255,165,0,0.35);
+  outline: 4px solid orange;
+  outline-offset: 3px;
 }
 
 .reset-btn {
@@ -381,4 +417,55 @@
   .winner-message h2 {
     font-size: 2rem;
   }
+}
+
+/* EXIT MODAL */
+.exit-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 900;
+  pointer-events: auto;
+}
+
+.exit-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  width: 500px;
+  height: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.exit-modal h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+.exit-options button {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 30px;
+  font-size: 2rem;
+  border-radius: 8px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.exit-options button.cursor {
+  outline: 4px solid orange;
+  outline-offset: 3px;
+  background: rgba(255,165,0,0.25);
 }

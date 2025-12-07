@@ -227,3 +227,10 @@
     padding: 0.6rem 1.2rem;
   }
 }
+
+.cursor {
+  outline: 4px solid orange;
+  outline-offset: 3px;
+  border-radius: 50px;
+  background-color: #E8824A;
+}
