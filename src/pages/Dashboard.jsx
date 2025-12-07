@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useController } from '../hardware/ControllerContext';
 import './Dashboard.css';
 
 function Dashboard() {
-  const [selectedOption, setSelectedOption] = useState('play');
   const navigate = useNavigate();
+  const { lastAction, clearAction } = useController();
 
-  const handleSelect = (option) => {
-    setSelectedOption(option);
-  };
+  const options = ["play", "chat", "settings"];
+  const [focusIndex, setFocusIndex] = useState(0);
+
+  const selectedOption = options[focusIndex];
 
   const handleConfirm = () => {
     if (selectedOption === 'play') {
@@ -20,30 +22,43 @@ function Dashboard() {
     }
   };
 
+  useEffect(() => {
+    if (!lastAction?.type) return;
+
+    const action = lastAction.type;
+
+    if (action === "UP") {
+      setFocusIndex(prev => (prev - 1 + 3) % 3);
+    }
+
+    if (action === "DOWN") {
+      setFocusIndex(prev => (prev + 1) % 3);
+    }
+
+    if (action === "A") {
+      clearAction();
+      handleConfirm();
+    }
+
+    clearAction();
+  }, [lastAction]);
+
   return (
     <div className="dashboard-container">
       {/* Main content */}
       <div className="dashboard-content">
-        <button
-          className={`menu-btn ${selectedOption === 'play' ? 'selected' : ''}`}
-          onClick={() => handleSelect('play')}
-        >
+
+        <button className={`menu-btn ${focusIndex === 0 ? "selected" : ""}`}>
           <img src="/Resources/ModelD/Console.png" alt="Play" className="btn-icon" />
           <span className="btn-text">Play</span>
         </button>
 
-        <button
-          className={`menu-btn ${selectedOption === 'chat' ? 'selected' : ''}`}
-          onClick={() => handleSelect('chat')}
-        >
+        <button className={`menu-btn ${focusIndex === 1 ? "selected" : ""}`}>
           <img src="/Resources/ModelD/Messenger.png" alt="Chat" className="btn-icon" />
           <span className="btn-text">Chat</span>
         </button>
 
-        <button
-          className={`menu-btn ${selectedOption === 'settings' ? 'selected' : ''}`}
-          onClick={() => handleSelect('settings')}
-        >
+        <button className={`menu-btn ${focusIndex === 2 ? "selected" : ""}`}>
           <img src="/Resources/ModelD/Setting.png" alt="Settings" className="btn-icon" />
           <span className="btn-text">Settings</span>
         </button>

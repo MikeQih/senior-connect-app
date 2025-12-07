@@ -1,5 +1,6 @@
 .login-container {
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0%;
   background: #FCD97B;
   display: flex;
   justify-content: center;
@@ -181,7 +182,6 @@
   box-shadow: 0 6px 20px rgba(107, 76, 230, 0.15);
 }
 
-/* Responsive design */
 @media (max-width: 480px) {
   .login-card {
     padding: 2rem 1.5rem;
@@ -194,4 +194,57 @@
   .login-logo h2 {
     font-size: 1.25rem;
   }
+}
+
+/* Highlight fields */
+.form-group.focused {
+  background: #ffe6b3;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* Highlight buttons */
+.focused-btn {
+  background-color: #ffb74d !important;
+  transform: scale(1.05);
+  transition: 0.15s;
+}
+
+.keyboard-overlay {
+  position: fixed;
+  bottom: var(--hardware-height, 650px);
+  left: 0;
+  width: 100%;
+  background: #fff7d1;
+  padding: 10px 8px;
+  border-top: 3px solid #d6c18a;
+  z-index: 999999;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  overflow-x: auto; 
+  padding-bottom: 6px;
+}
+
+.key {
+  padding: 16px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  background: #f0d28a;
+  border: 2px solid #ccba82;
+  flex-shrink: 0;  
+  min-width: 55px;  
+  text-align: center;
+}
+
+.key-backspace {
+  background: #e8b47a;
+}
+
+.key-done {
+  background: #cfa44e;
+  font-weight: bold;
 }
