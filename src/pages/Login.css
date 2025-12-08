@@ -10,7 +10,6 @@
   overflow: hidden;
 }
 
-/* Decorative ellipses - same as home page */
 .login-container::before {
   content: '';
   position: absolute;
@@ -103,7 +102,7 @@
 .form-group input {
   padding: 0.9rem 1rem;
   border: 1.5px solid #e0e0e0;
-  border-radius: 12px;
+  border-radius: 50px;
   font-size: 1rem;
   transition: all 0.3s ease;
   font-family: inherit;
@@ -111,38 +110,23 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #6B4CE6;
-  box-shadow: 0 0 0 3px rgba(107, 76, 230, 0.1);
+  border-color: #d67339;
 }
 
-.password-input-wrapper {
-  position: relative;
+.input-focused {
+  outline: 4px solid orange;
+  outline-offset: -4px;
+  border-radius: 50px !important;
+  background-color: rgba(255,165,0,0.25) !important; 
+  transition: outline 0.15s ease-in-out;
 }
 
-.password-input-wrapper input {
-  width: 100%;
-  padding-right: 3rem;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-
-.toggle-password:hover {
-  opacity: 1;
+.focused-btn {
+  outline: 4px solid orange;
+  outline-offset: 2px;
+  border-radius: 50px;
+  background-color: rgba(255,165,0,0.2) !important;
+  transition: outline 0.15s ease-in-out;
 }
 
 .btn-login {
@@ -161,7 +145,7 @@
 .btn-login:hover {
   background: #5a3dd4;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(107, 76, 230, 0.3);
+  box-shadow: 0 0 8px rgba(207, 164, 78, 0.3);
 }
 
 .btn-signup {
@@ -182,34 +166,6 @@
   box-shadow: 0 6px 20px rgba(107, 76, 230, 0.15);
 }
 
-@media (max-width: 480px) {
-  .login-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .login-logo img {
-    width: 100px;
-  }
-
-  .login-logo h2 {
-    font-size: 1.25rem;
-  }
-}
-
-/* Highlight fields */
-.form-group.focused {
-  background: #ffe6b3;
-  border-radius: 12px;
-  padding: 10px;
-}
-
-/* Highlight buttons */
-.focused-btn {
-  background-color: #ffb74d !important;
-  transform: scale(1.05);
-  transition: 0.15s;
-}
-
 .keyboard-overlay {
   position: fixed;
   bottom: var(--hardware-height, 650px);
@@ -225,7 +181,7 @@
   display: flex;
   flex-direction: row;
   gap: 6px;
-  overflow-x: auto; 
+  overflow-x: auto;
   padding-bottom: 6px;
 }
 
@@ -235,16 +191,16 @@
   border-radius: 10px;
   background: #f0d28a;
   border: 2px solid #ccba82;
-  flex-shrink: 0;  
-  min-width: 55px;  
+  flex-shrink: 0;
+  min-width: 55px;
   text-align: center;
 }
 
 .key-backspace {
-  background: #e8b47a;
+  background: #d67339;
 }
 
 .key-done {
-  background: #cfa44e;
+  background: #d67339;
   font-weight: bold;
 }
