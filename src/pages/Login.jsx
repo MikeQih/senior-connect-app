@@ -1,85 +1,83 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useController } from '../hardware/ControllerContext';
+import { useUIModel } from '../contexts/UIModelContext';
 import './Login.css';
 
 function Login() {
   const navigate = useNavigate();
   const { lastAction, clearAction } = useController();
-
+  const { uiModel } = useUIModel(); // Detect Model D or Model R
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
 
-  // 0=email, 1=password, 2=login button, 3=signup button
-  const [focusIndex, setFocusIndex] = useState(0);
+  const [focusIndex, setFocusIndex] = useState(0); // 0: email, 1: password, 2: login, 3: signup
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const handleLogin = () => {
-    // Navigate to dashboard after login
-    navigate('/dashboard');
-  };
+  const handleLogin = () => navigate('/dashboard');
+  const handleSignup = () => navigate('/signup');
+  const handleBack = () => navigate('/');
 
-  const handleSignup = () => {
-    // Navigate to signup page or show signup form
-    navigate('/signup');
-  };
-
-  const handleBack = () => {
-    // Navigate back to home
-    navigate('/');
-  };
-
+  // HARDWARE INPUT
   useEffect(() => {
-  if (!lastAction?.type) return;
+    if (!lastAction?.type) return;
+    let action = lastAction.type;
 
-  const action = lastAction.type;
+    if (uiModel === "ModelR") {
+      if (action === "RIGHT") action = "DOWN"; 
+      if (action === "LEFT") action = "UP";
+    }
 
-  if (action === "UP") {
-    setFocusIndex(prev => (prev - 1 + 4) % 4);
-  }
+    if (action === "B") {
+      clearAction();
+      handleBack();
+      return;
+    }
 
-  if (action === "DOWN") {
-    setFocusIndex(prev => (prev + 1) % 4);
-  }
+    if (action === "UP") {
+      setFocusIndex(prev => (prev - 1 + 4) % 4);
+      clearAction();
+      return;
+    }
 
-  if (action === "B") {
+    if (action === "DOWN") {
+      setFocusIndex(prev => (prev + 1) % 4);
+      clearAction();
+      return;
+    }
+
+    if (action === "A") {
+      if (focusIndex === 0) {
+        setActiveInput("email");
+        setShowKeyboard(true);
+        emailRef.current?.focus();
+      }
+      else if (focusIndex === 1) {
+        setActiveInput("password");
+        setShowKeyboard(true);
+        passwordRef.current?.focus();
+      }
+      else if (focusIndex === 2) {
+        handleLogin();
+      }
+      else if (focusIndex === 3) {
+        handleSignup();
+      }
+
+      clearAction();
+      return;
+    }
+
     clearAction();
-    navigate("/");
-    return;
-  }
+  }, [lastAction, uiModel]);
 
-  if (action === "A") {
-    if (focusIndex === 0) {
-      setActiveInput("email");
-      setShowKeyboard(true);
-      emailRef.current.focus();
-    }
-    else if (focusIndex === 1) {
-      setActiveInput("password");
-      setShowKeyboard(true);
-      passwordRef.current.focus();
-    }
-    else if (focusIndex === 2) {
-      clearAction();
-      handleLogin();
-      return;
-    }
-    else if (focusIndex === 3) {
-      clearAction();
-      handleSignup();
-      return;
-    }
-  }
 
-  clearAction();
-}, [lastAction]);
-
-  // Auto-switch keyboard input
+  // SWITCH INPUT FOCUS WHEN KEYBOARD IS OPEN
   useEffect(() => {
     if (!showKeyboard) return;
 
@@ -94,11 +92,11 @@ function Login() {
     }
   }, [focusIndex]);
 
-  // Auto-close keyboard at login/signup button
+  // CLOSE KEYBOARD WHEN DONE
   useEffect(() => {
     if (!showKeyboard) return;
 
-    if (focusIndex > 1) {
+    if (focusIndex >= 2) {
       setShowKeyboard(false);
       setActiveInput(null);
     }
@@ -107,7 +105,7 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
-        
+
         <div className="login-logo">
           <img src="/Resources/Family.png" alt="SeniorConnect+" />
           <h2>SeniorConnect+</h2>
@@ -115,11 +113,13 @@ function Login() {
 
         <div className="login-form">
 
-          <div className={`form-group ${focusIndex === 0 ? "focused" : ""}`}>
+          {/* EMAIL FIELD */}
+          <div className="form-group">
             <label>Email Address</label>
             <input
               tabIndex="-1"
               ref={emailRef}
+              className={focusIndex === 0 ? "input-focused" : ""}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -127,11 +127,12 @@ function Login() {
             />
           </div>
 
-          <div className={`form-group ${focusIndex === 1 ? "focused" : ""}`}>
+          <div className="form-group">
             <label>Password</label>
             <input
               tabIndex="-1"
               ref={passwordRef}
+              className={focusIndex === 1 ? "input-focused" : ""}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -153,7 +154,6 @@ function Login() {
             Sign Up
           </button>
 
-
         </div>
       </div>
 
@@ -165,8 +165,8 @@ function Login() {
                 key={k}
                 className="key"
                 onClick={() => {
-                  if (activeInput === "email") setEmail((prev) => prev + k);
-                  else setPassword((prev) => prev + k);
+                  if (activeInput === "email") setEmail(prev => prev + k);
+                  else setPassword(prev => prev + k);
                 }}
               >
                 {k}
@@ -176,8 +176,8 @@ function Login() {
             <button
               className="key key-backspace"
               onClick={() => {
-                if (activeInput === "email") setEmail((prev) => prev.slice(0, -1));
-                else setPassword((prev) => prev.slice(0, -1));
+                if (activeInput === "email") setEmail(prev => prev.slice(0, -1));
+                else setPassword(prev => prev.slice(0, -1));
               }}
             >
               ⌫
