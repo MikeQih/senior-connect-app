@@ -189,13 +189,14 @@ function Chat() {
       </div>
 
       <div className="voice-input">
+        {isRecording && <p className="recording-text">Recording ...</p>}
         <button
           className={`voice-btn ${isRecording ? 'recording' : ''}`}
           onClick={() => setIsRecording(!isRecording)}
         >
           <img
-            src={isRecording ? '/Resources/ModelD/VoiceRecording.png' : '/Resources/ModelD/Voice.png'}
-            className="voice-icon"
+            src={isRecording ? '/Resources/ModelR/DuringCallingWave.png' : '/Resources/ModelD/Voice.png'}
+            className={`voice-icon ${isRecording ? 'recording-wave' : ''}`}
           />
         </button>
       </div>

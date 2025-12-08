@@ -216,9 +216,11 @@
 /* Voice Input */
 .voice-input {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1.5rem;
+  gap: 0.5rem;
   position: relative;
   z-index: 1;
 }
@@ -227,7 +229,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 4px solid #1a1a2e;
+  border: 4px solid #FFAB57;
   background: #FFF9E6;
   cursor: pointer;
   display: flex;
@@ -243,8 +245,8 @@
 }
 
 .voice-btn.recording {
-  background: #ff4444;
-  border-color: #cc0000;
+  background: #ffffff;
+  border-color: #FFAB57;
   animation: pulse 1.5s infinite;
 }
 
@@ -258,9 +260,46 @@
 }
 
 .voice-icon {
-  width: 60px;
-  height: 60px;
+  width: 130px;
+  height: 130px;
   object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(60%) sepia(85%) saturate(458%) hue-rotate(338deg) brightness(102%) contrast(101%);
+}
+
+/* Recording wave animation */
+.recording-wave {
+  width: 80px !important;
+  height: 80px !important;
+  animation: waveAnimation 1.2s ease-in-out infinite;
+  filter: brightness(0) saturate(100%) invert(60%) sepia(85%) saturate(458%) hue-rotate(338deg) brightness(102%) contrast(101%);
+}
+
+@keyframes waveAnimation {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(1.2);
+    opacity: 0.8;
+  }
+}
+
+.recording-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Contact Switcher */
