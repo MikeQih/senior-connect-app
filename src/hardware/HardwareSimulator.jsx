@@ -103,8 +103,6 @@ export default function HardwareSimulator() {
 
   const controlImage = uiModel === "ModelR" ? knobImage : dpadImage;
 
-  console.log("KNOB ROTATION DEBUG: rotation =", rotation);
-
   return (
     <div className="hardware-container">
       <div className="dpad-container">

@@ -6,15 +6,15 @@ import "./MatchingPairs.css";
 const CARD_BACK = "/Resources/Game/MatchingPairs/card.svg";
 
 const LEVEL_LAYOUTS = {
-  1: { rows: 2, cols: 4 }, // 8 cards
-  2: { rows: 2, cols: 5 }, // 10 cards
-  3: { rows: 2, cols: 6 }, // 12 cards
-  4: { rows: 2, cols: 7 }, // 14 cards
-  5: { rows: 4, cols: 4 }, // 16 cards
+  1: { rows: 2, cols: 4 },
+  2: { rows: 2, cols: 5 },
+  3: { rows: 2, cols: 6 },
+  4: { rows: 2, cols: 7 },
+  5: { rows: 4, cols: 4 }
 };
 
-function shuffle(array) {
-  const copy = [...array];
+function shuffle(arr) {
+  const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
@@ -24,7 +24,7 @@ function shuffle(array) {
 
 function generateCards(level) {
   const { rows, cols } = LEVEL_LAYOUTS[level];
-  const totalSlots = rows * cols;
+  const total = rows * cols;
 
   const pool = [
     "star", "bike", "plane", "bolt", "leaf",
@@ -32,10 +32,10 @@ function generateCards(level) {
     "flower", "dog"
   ];
 
-  const pairsNeeded = totalSlots / 2;
-
+  const pairs = total / 2;
   const selected = [];
-  for (let i = 0; i < pairsNeeded; i++) {
+
+  for (let i = 0; i < pairs; i++) {
     const type = pool[i % pool.length];
     selected.push({ type, img: `/Resources/Game/MatchingPairs/${type}.svg` });
   }
@@ -48,12 +48,10 @@ function generateCards(level) {
   return shuffle(deck);
 }
 
-function computeCardSize(rows, cols, wrapWidth, wrapHeight) {
-  const aspect = 3 / 4; // width / height
-
-  const maxW = (wrapWidth / cols) * 0.9;
-  const maxH = (wrapHeight / rows) * 0.85;
-
+function computeCardSize(rows, cols, w, h) {
+  const aspect = 3 / 4;
+  const maxW = (w / cols) * 0.9;
+  const maxH = (h / rows) * 0.85;
   return Math.min(maxW, maxH * aspect);
 }
 
@@ -65,18 +63,15 @@ function formatTime(t) {
 
 export default function MatchingPairs() {
   const navigate = useNavigate();
-
   const { lastAction, clearAction } = useController();
   const [cursor, setCursor] = useState(0);
   const [exitModal, setExitModal] = useState(false);
   const [modalCursor, setModalCursor] = useState(0);
 
-
   const [level, setLevel] = useState(1);
-  const [grid, setGrid] = useState({ rows: 2, cols: 4, cardSize: 100 });
-
   const { rows, cols } = LEVEL_LAYOUTS[level];
-  const totalSlots = rows * cols;
+  const total = rows * cols;
+  const [grid, setGrid] = useState({ rows, cols, cardSize: 100 });
 
   const [cards, setCards] = useState(() => generateCards(level));
   const [openCards, setOpenCards] = useState([]);
@@ -87,9 +82,8 @@ export default function MatchingPairs() {
   const [modal, setModal] = useState(false);
 
   // RESET GAME
-  const reset = (nextLevel = level) => {
-    const lv = Math.min(nextLevel, 5);
-
+  const reset = (next = level) => {
+    const lv = Math.min(next, 5);
     setLevel(lv);
     setCards(generateCards(lv));
     setOpenCards([]);
@@ -100,7 +94,7 @@ export default function MatchingPairs() {
     setModal(false);
   };
 
-  // CARD CLICK LOGIC
+  // FLIP CARD
   const clickCard = (i) => {
     const blocked =
       openCards.includes(i) ||
@@ -109,13 +103,8 @@ export default function MatchingPairs() {
       modal;
 
     if (blocked) return;
-
     setOpenCards(prev => [...prev, i]);
   };
-
-  useEffect(() => {
-    setCards(generateCards(level));
-  }, [level]);
 
   useEffect(() => {
     if (openCards.length === 2) {
@@ -131,121 +120,127 @@ export default function MatchingPairs() {
     }
   }, [openCards]);
 
-useEffect(() => {
-  if (!lastAction) return;
-  const action = lastAction.type;
+  // HARDWARE INPUT
+  useEffect(() => {
+    if (!lastAction) return;
+    const action = lastAction.type;
 
-  // EXIT MODAL
-  if (exitModal) {
-    if (action === "UP") {
-      setModalCursor(prev => Math.max(prev - 1, 0));
-    } 
-    else if (action === "DOWN") {
-      setModalCursor(prev => Math.min(prev + 1, 1));
-    }
-    else if (action === "A") {
-      if (modalCursor === 0) navigate("/game/select");
-      else setExitModal(false);
-    }
-    clearAction();
-    return;
-  }
+    let normalized = action;
+    if (action === "LEFT") normalized = "LEFT";
+    if (action === "RIGHT") normalized = "RIGHT";
 
-  // B BUTTON ALWAYS OPENS EXIT MODAL
-  if (action === "B") {
-    setExitModal(true);
-    setModalCursor(0);
-    clearAction();
-    return;
-  }
-
-  // WIN MODAL
-  if (modal) {
-    const maxIndex = 1;
-
-    if (action === "UP") {
-      setModalCursor(prev => Math.max(prev - 1, 0));
-    } 
-    else if (action === "DOWN") {
-      setModalCursor(prev => Math.min(prev + 1, maxIndex));
-    }
-    else if (action === "A") {
-      if (modalCursor === 0) {
-        if (level < 5) reset(level + 1);
-        else reset(1);
-      } else {
-        navigate("/game/select");
+    // EXIT MODAL
+    if (exitModal) {
+      if (normalized === "UP" || normalized === "LEFT") {
+        setModalCursor(prev => Math.max(prev - 1, 0));
+      } else if (normalized === "DOWN" || normalized === "RIGHT") {
+        setModalCursor(prev => Math.min(prev + 1, 1));
+      } else if (action === "A") {
+        if (modalCursor === 0) navigate("/game/select");
+        else setExitModal(false);
       }
+      clearAction();
+      return;
     }
 
-    clearAction();
-    return;
-  }
+    // WIN MODAL
+    if (modal) {
+      if (action === "B") {
+        setExitModal(true);
+        setModalCursor(0);
+        clearAction();
+        return;
+      }
 
-  // NORMAL GAME CONTROLS
-  if (action === "UP") {
+      const maxIndex = 1;
+
+      if (normalized === "UP" || normalized === "LEFT") {
+        setModalCursor(prev => Math.max(prev - 1, 0));
+      } 
+      else if (normalized === "DOWN" || normalized === "RIGHT") {
+        setModalCursor(prev => Math.min(prev + 1, maxIndex));
+      }
+      else if (action === "A") {
+        if (modalCursor === 0) {
+          level < 5 ? reset(level + 1) : reset(1);
+        } else {
+          navigate("/game/select");
+        }
+      }
+
+      clearAction();
+      return;
+      }
+
+    if (action === "B") {
+      setExitModal(true);
+      setModalCursor(0);
+      clearAction();
+      return;
+    }
+
+    // GAMEPLAY
+    // KNOB
+    if (normalized === "RIGHT") {
+      setCursor(prev => (prev + 1) % total);
+    }
+    else if (normalized === "LEFT") {
+      setCursor(prev => (prev - 1 + total) % total);
+    }
+
+    // DPAD
+    else if (action === "UP") {
       setCursor(prev => Math.max(prev - cols, 0));
     }
     else if (action === "DOWN") {
-      setCursor(prev => Math.min(prev + cols, totalSlots - 1));
+      setCursor(prev => Math.min(prev + cols, total - 1));
     }
     else if (action === "LEFT") {
       setCursor(prev => (prev % cols === 0 ? prev : prev - 1));
     }
     else if (action === "RIGHT") {
-      setCursor(prev =>
-        (prev % cols === cols - 1 ? prev : prev + 1)
-      );
+      setCursor(prev => (prev % cols === cols - 1 ? prev : prev + 1));
     }
     else if (action === "A") {
       clickCard(cursor);
     }
 
     clearAction();
-  }, [lastAction]);
-
-  useEffect(() => {
-    if (modal || exitModal) {
-      setModalCursor(0);
-    }
-  }, [modal, exitModal]);
-
+  }, [lastAction, modal, exitModal, modalCursor, cols, total, level]);
 
   // TIMER
   useEffect(() => {
     if (!running) return;
-    const id = setInterval(() => setTime((t) => t + 1), 1000);
+    const id = setInterval(() => setTime(t => t + 1), 1000);
     return () => clearInterval(id);
   }, [running]);
 
-  // CHECK FOR LEVEL COMPLETE
+  // CHECK WIN CONDITION
   useEffect(() => {
-    if (matched.length === totalSlots) {
+    if (matched.length === total) {
       setRunning(false);
       setModal(true);
     }
   }, [matched]);
 
+  // GRID RESIZE
   useEffect(() => {
     function update() {
-      const wrapper = document.querySelector(".mp-grid-wrapper");
-      if (!wrapper) return;
+      const wrap = document.querySelector(".mp-grid-wrapper");
+      if (!wrap) return;
 
-      const { width, height } = wrapper.getBoundingClientRect();
+      const { width, height } = wrap.getBoundingClientRect();
       const size = computeCardSize(rows, cols, width, height);
-
       setGrid({ rows, cols, cardSize: size });
     }
-
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, [level, rows, cols]);
+  }, [rows, cols]);
 
   return (
     <div className="mp-container">
       <div className={modal ? "mp-content blurred" : "mp-content"}>
-        
         <div className="mp-header">
           <h1>Level {level} — {rows}×{cols}</h1>
           <p>Moves: {moves} | Time: {formatTime(time)}</p>
@@ -261,37 +256,30 @@ useEffect(() => {
           >
             {cards.map((c, idx) => {
               const isOpen = openCards.includes(idx) || matched.includes(idx);
-              const isMatched = matched.includes(idx);
-
               return (
                 <li
                   key={c.id}
                   className={`mp-card 
                     ${isOpen ? "open" : ""} 
-                    ${isMatched ? "matched" : ""} 
+                    ${matched.includes(idx) ? "matched" : ""} 
                     ${cursor === idx ? "cursor" : ""}
                   `}
                   style={{
                     width: grid.cardSize,
-                    height: grid.cardSize * (4 / 3),
+                    height: grid.cardSize * (4 / 3)
                   }}
                   onClick={() => clickCard(idx)}
                 >
-
                   <img
                     src={isOpen ? c.img : CARD_BACK}
-                    style={{ width: "100%", height: "100%" }}
                     alt="card"
+                    style={{ width: "100%", height: "100%" }}
                   />
                 </li>
               );
             })}
           </ul>
         </div>
-
-        <button className="mp-restart" onClick={() => reset(level)}>
-          Restart Level
-        </button>
       </div>
 
       {/* WIN MODAL */}
@@ -305,7 +293,7 @@ useEffect(() => {
             <div className="mp-modal-buttons">
               <button
                 className={modalCursor === 0 ? "cursor" : ""}
-                onClick={() => level < 5 ? reset(level + 1) : reset(1)}
+                onClick={() => (level < 5 ? reset(level + 1) : reset(1))}
               >
                 {level < 5 ? "Next Level →" : "Restart from Level 1"}
               </button>
@@ -342,7 +330,6 @@ useEffect(() => {
               >
                 No — Resume
               </button>
-
             </div>
           </div>
         </div>

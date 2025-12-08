@@ -41,53 +41,72 @@ function Connect4Game() {
   }, [selectedColumn, gameOver, currentPlayer, board]);
 
   useEffect(() => {
-    if (!lastAction?.type) return;
-    const action = lastAction.type;
+  if (!lastAction?.type) return;
+  const action = lastAction.type;
 
-    // EXIT MODAL
-    if (exitModal) {
-      if (action === "UP" || action === "DOWN") {
+  let normalized = action;
+
+  if (uiModel === "ModelR") {
+    if (action === "RIGHT") normalized = "DOWN";   // clockwise
+    if (action === "LEFT") normalized = "UP";      // anticlockwise
+  }
+
+  // EXIT MODAL
+  if (exitModal) {
+
+    if (uiModel === "ModelR") {
+      // knob
+      if (action === "RIGHT") {
         setExitCursor(prev => (prev === 0 ? 1 : 0));
+        clearAction();
+        return;
       }
-      if (action === "A") {
-        if (exitCursor === 0) navigate("/game/select");
-        if (exitCursor === 1) setExitModal(false);
+      if (action === "LEFT") {
+        setExitCursor(prev => (prev === 0 ? 1 : 0));
+        clearAction();
+        return;
       }
-      clearAction();
-      return;
     }
 
-    // WIN MODAL
-    if (gameOver) {
-      if (action === "UP" || action === "DOWN") {
-        setModalCursor(prev => (prev === 0 ? 1 : 0));
-      }
-
-      if (action === "A") {
-        if (modalCursor === 0) handleReset();
-        if (modalCursor === 1) navigate("/game/select");
-      }
-
-      if (action === "B") {
-        setExitModal(true);
-        setExitCursor(0);
-      }
-
-      clearAction();
-      return;
-    }
-
-    // NORMAL GAMEPLAY CONTROLS
-    if (action === "LEFT") {
-      setSelectedColumn(prev => Math.max(0, prev - 1));
-    }
-
-    if (action === "RIGHT") {
-      setSelectedColumn(prev => Math.min(6, prev + 1));
+    // dpad
+    if (action === "UP" || action === "DOWN") {
+      setExitCursor(prev => (prev === 0 ? 1 : 0));
     }
 
     if (action === "A") {
-      handleDropPiece();
+      if (exitCursor === 0) navigate("/game/select");
+      else setExitModal(false);
+    }
+
+    clearAction();
+    return;
+  }
+
+  // WIN MODAL
+  if (gameOver) {
+
+    if (uiModel === "ModelR") {
+      // knob
+      if (action === "RIGHT") {
+        setModalCursor(prev => (prev === 0 ? 1 : 0));
+        clearAction();
+        return;
+      }
+      if (action === "LEFT") {
+        setModalCursor(prev => (prev === 0 ? 1 : 0));
+        clearAction();
+        return;
+      }
+    }
+
+    // dpad
+    if (action === "UP" || action === "DOWN") {
+      setModalCursor(prev => (prev === 0 ? 1 : 0));
+    }
+
+    if (action === "A") {
+      if (modalCursor === 0) handleReset();
+      else navigate("/game/select");
     }
 
     if (action === "B") {
@@ -96,7 +115,50 @@ function Connect4Game() {
     }
 
     clearAction();
-  }, [lastAction, gameOver, exitModal, modalCursor, selectedColumn]);
+    return;
+  }
+
+  // GAMEPLAY
+  // KNOB
+  if (uiModel === "ModelR" && action === "RIGHT") {
+    setSelectedColumn(prev => Math.min(6, prev + 1));
+    clearAction();
+    return;
+  }
+
+  if (uiModel === "ModelR" && action === "LEFT") {
+    setSelectedColumn(prev => Math.max(0, prev - 1));
+    clearAction();
+    return;
+  }
+
+  // DPAD
+  if (action === "LEFT") {
+    setSelectedColumn(prev => Math.max(0, prev - 1));
+  }
+  if (action === "RIGHT") {
+    setSelectedColumn(prev => Math.min(6, prev + 1));
+  }
+
+  if (action === "A") {
+    handleDropPiece();
+  }
+
+  if (action === "B") {
+    setExitModal(true);
+    setExitCursor(0);
+  }
+
+  clearAction();
+}, [
+  lastAction,
+  uiModel,
+  exitModal,
+  exitCursor,
+  gameOver,
+  modalCursor,
+  selectedColumn
+]);
 
   // GAME LOGIC FUNCTIONS
   const isBoardFull = board =>

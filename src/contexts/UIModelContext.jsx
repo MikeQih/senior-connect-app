@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const UIModelContext = createContext();
 
@@ -11,7 +11,14 @@ export const useUIModel = () => {
 };
 
 export const UIModelProvider = ({ children }) => {
-  const [uiModel, setUIModel] = useState('ModelD'); // 'ModelD' or 'ModelR'
+  const [uiModel, setUIModel] = useState(() => {
+    return localStorage.getItem("uiModel") || "ModelD";
+  });
+
+  // Save when changed
+  useEffect(() => {
+    localStorage.setItem("uiModel", uiModel);
+  }, [uiModel]);
 
   const toggleUIModel = (model) => {
     setUIModel(model);

@@ -15,29 +15,36 @@ function Tutorial() {
   const [cursorCol, setCursorCol] = useState(1); // 0 = prev, 1 = next
 
   const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const handlePrevious = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const handleBack = () => {
-    navigate('/game/select');
-  };
+  const handleBack = () => navigate('/game/select');
 
-  const handleStartGame = () => {
-    navigate('/game/connect4/play');
-  };
+  const handleStartGame = () => navigate('/game/connect4/play');
 
-  // HARDWARE CONTROLLER INPUT
+
+  // HARDWARE INPUT
   useEffect(() => {
     if (!lastAction) return;
-    const action = lastAction.type;
+    let action = lastAction.type;
+
+    const knobIndex = cursorRow === 0 ? cursorCol : 2;  // 0 = left arrow, 1 = right arrow, 2 = start btn
+
+    function applyKnobIndex(i) {
+      if (i === 0) {
+        setCursorRow(0);
+        setCursorCol(0);
+      } else if (i === 1) {
+        setCursorRow(0);
+        setCursorCol(1);
+      } else {
+        setCursorRow(1);
+      }
+    }
 
     if (action === "B") {
       handleBack();
@@ -45,6 +52,27 @@ function Tutorial() {
       return;
     }
 
+    // KNOB
+    if (uiModel === "ModelR") {
+
+      if (action === "RIGHT") {
+        // clockwise
+        const next = (knobIndex + 1) % 3;
+        applyKnobIndex(next);
+        clearAction();
+        return;
+      }
+
+      if (action === "LEFT") {
+        // anticlockwise
+        const prev = (knobIndex + 2) % 3;
+        applyKnobIndex(prev);
+        clearAction();
+        return;
+      }
+    }
+
+    // DPAD
     if (action === "UP") {
       setCursorRow(prev => Math.max(prev - 1, 0));
       clearAction();
@@ -82,7 +110,7 @@ function Tutorial() {
       return;
     }
 
-  }, [lastAction, cursorRow, cursorCol]);
+  }, [lastAction, cursorRow, cursorCol, uiModel]);
 
   return (
     <div className="tutorial-container">
