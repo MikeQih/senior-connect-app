@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useController } from "../hardware/ControllerContext";
+import { saveMatchingPairsScore } from "../firebase/gameScores";
+import { logGameStart, logGameComplete, logGameExit, logPageView } from "../firebase/analytics";
 import "./MatchingPairs.css";
 
 const CARD_BACK = "/Resources/Game/MatchingPairs/card.svg";
@@ -80,6 +82,8 @@ export default function MatchingPairs() {
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(true);
   const [modal, setModal] = useState(false);
+  const [participantId, setParticipantId] = useState("TEST_PARTICIPANT_001"); // TODO: Replace with actual participant ID from backend
+  const [scoreSaved, setScoreSaved] = useState(false);
 
   // RESET GAME
   const reset = (next = level) => {
@@ -92,6 +96,10 @@ export default function MatchingPairs() {
     setTime(0);
     setRunning(true);
     setModal(false);
+    setScoreSaved(false);
+
+    // Log game start
+    logGameStart('matching_pairs', lv, participantId);
   };
 
   // FLIP CARD
@@ -222,6 +230,41 @@ export default function MatchingPairs() {
       setModal(true);
     }
   }, [matched]);
+
+  // SAVE SCORE TO FIREBASE WHEN LEVEL COMPLETED
+  useEffect(() => {
+    if (modal && !scoreSaved) {
+      const saveScore = async () => {
+        try {
+          await saveMatchingPairsScore(participantId, level, moves, time);
+          setScoreSaved(true);
+          console.log('Score successfully saved to Firebase!');
+
+          // Log game completion to Analytics
+          logGameComplete('matching_pairs', level, moves, time, participantId);
+        } catch (error) {
+          console.error('Failed to save score:', error);
+        }
+      };
+      saveScore();
+    }
+  }, [modal, scoreSaved, participantId, level, moves, time]);
+
+  // PAGE VIEW AND INITIAL GAME START
+  useEffect(() => {
+    // Log page view
+    logPageView('Matching Pairs Game');
+
+    // Log initial game start
+    logGameStart('matching_pairs', level, participantId);
+
+    // Cleanup: log game exit when component unmounts
+    return () => {
+      if (running) {
+        logGameExit('matching_pairs', level, 'component_unmount', participantId);
+      }
+    };
+  }, []); // Only run on mount/unmount
 
   // GRID RESIZE
   useEffect(() => {
