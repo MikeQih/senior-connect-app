@@ -11,6 +11,7 @@ import GameSelection from './pages/GameSelection'
 import Tutorial from './pages/Tutorial'
 import Connect4Game from './pages/Connect4Game'
 import MatchingPairs from './pages/MatchingPairs'
+import TutorialMatchingPairs from './pages/TutorialMatchingPairs'
 
 import HardwareSimulator from "./hardware/HardwareSimulator";
 import './App.css'
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/game/select" element={<GameSelection />} />
                 <Route path="/game/connect4/tutorial" element={<Tutorial />} />
                 <Route path="/game/connect4/play" element={<Connect4Game />} />
+                <Route path="/game/matchingpairs/tutorial" element={<TutorialMatchingPairs />} />
                 <Route path="/game/matchingpairs" element={<MatchingPairs />} />
               </Routes>
             </div>

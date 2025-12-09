@@ -15,7 +15,7 @@ function GameSelection() {
       name: 'Matching Pairs',
       icon: '/Resources/Game/MatchingPairs/MatchingPairsIcon.png',
       display: '/Resources/Game/MatchingPairs/MatchingPairsDisplay.png',
-      route: '/game/matchingpairs'
+      route: '/game/matchingpairs/tutorial'
     },
     {
       id: 'Solitaire',
