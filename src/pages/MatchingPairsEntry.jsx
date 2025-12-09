@@ -9,6 +9,25 @@ function MatchingPairsEntry() {
   const { uiModel } = useUIModel();
   const { lastAction, clearAction } = useController();
   const [selectedButton, setSelectedButton] = useState(0); // 0 = Play, 1 = How to Play
+  const [flippedCards, setFlippedCards] = useState([false, true, false, true]); // Cards 1 and 3 show icons initially
+
+  // Auto-flip cards animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFlippedCards(prev => {
+        const newFlipped = [...prev];
+        // Randomly flip 1-2 cards
+        const numToFlip = Math.random() > 0.5 ? 1 : 2;
+        for (let i = 0; i < numToFlip; i++) {
+          const randomIndex = Math.floor(Math.random() * 4);
+          newFlipped[randomIndex] = !newFlipped[randomIndex];
+        }
+        return newFlipped;
+      });
+    }, 1500); // Flip every 1.5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handlePlay = () => {
     navigate('/game/matchingpairs');
@@ -108,17 +127,45 @@ function MatchingPairsEntry() {
 
         {/* Sample Cards Display */}
         <div className="mp-entry-cards">
-          <div className="mp-entry-card">
-            <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+          <div className={`mp-entry-card ${flippedCards[0] ? 'flipped' : ''}`}>
+            <div className="card-inner">
+              <div className="card-back">
+                <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+              </div>
+              <div className="card-front">
+                <img src="/Resources/Game/MatchingPairs/bike.svg" alt="Bike" />
+              </div>
+            </div>
           </div>
-          <div className="mp-entry-card">
-            <img src="/Resources/Game/MatchingPairs/cube.svg" alt="Cube" />
+          <div className={`mp-entry-card ${flippedCards[1] ? 'flipped' : ''}`}>
+            <div className="card-inner">
+              <div className="card-back">
+                <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+              </div>
+              <div className="card-front">
+                <img src="/Resources/Game/MatchingPairs/cube.svg" alt="Cube" />
+              </div>
+            </div>
           </div>
-          <div className="mp-entry-card">
-            <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+          <div className={`mp-entry-card ${flippedCards[2] ? 'flipped' : ''}`}>
+            <div className="card-inner">
+              <div className="card-back">
+                <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+              </div>
+              <div className="card-front">
+                <img src="/Resources/Game/MatchingPairs/bolt.svg" alt="Bolt" />
+              </div>
+            </div>
           </div>
-          <div className="mp-entry-card">
-            <img src="/Resources/Game/MatchingPairs/leaf.svg" alt="Leaf" />
+          <div className={`mp-entry-card ${flippedCards[3] ? 'flipped' : ''}`}>
+            <div className="card-inner">
+              <div className="card-back">
+                <img src="/Resources/Game/MatchingPairs/card.svg" alt="Card back" />
+              </div>
+              <div className="card-front">
+                <img src="/Resources/Game/MatchingPairs/leaf.svg" alt="Leaf" />
+              </div>
+            </div>
           </div>
         </div>
 
