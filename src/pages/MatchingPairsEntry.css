@@ -77,16 +77,15 @@
   border: 3px solid #1a1a2e;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s;
   background: white;
   color: #1a1a2e;
   min-width: 350px;
 }
 
 .mp-entry-play {
-  border-style: dashed;
-  border-width: 4px;
-  border-color: #2d6a4f;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #1a1a2e;
 }
 
 .mp-entry-play:hover {
@@ -97,6 +96,7 @@
 .mp-entry-tutorial {
   border-style: solid;
   border-width: 3px;
+  border-color: #1a1a2e;
 }
 
 .mp-entry-tutorial:hover {
@@ -112,12 +112,28 @@
   font-size: 1.8rem;
 }
 
+/* Blinking animation for background and border */
+@keyframes blinkButton {
+  0%, 100% {
+    background-color: #E8824A;
+    border-color: #E8824A;
+    border-style: dashed;
+    color: white;
+  }
+  50% {
+    background-color: white;
+    border-color: #1a1a2e;
+    border-style: solid;
+    color: #1a1a2e;
+  }
+}
+
 .mp-entry-btn.cursor {
-  outline: 5px solid #E8824A;
-  outline-offset: 3px;
-  background-color: #E8824A;
-  color: white;
   transform: scale(1.05);
+}
+
+.mp-entry-btn.blink {
+  animation: blinkButton 1s ease-in-out infinite;
 }
 
 /* Control hints */

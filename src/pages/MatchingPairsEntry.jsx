@@ -22,6 +22,32 @@ function MatchingPairsEntry() {
     navigate('/game/select');
   };
 
+  // KEYBOARD INPUT
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedButton(0);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedButton(1);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (selectedButton === 0) {
+          handlePlay();
+        } else {
+          handleTutorial();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        handleBack();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedButton]);
+
   // HARDWARE INPUT
   useEffect(() => {
     if (!lastAction) return;
@@ -99,7 +125,7 @@ function MatchingPairsEntry() {
         {/* Buttons */}
         <div className="mp-entry-buttons">
           <button
-            className={`mp-entry-btn mp-entry-play ${selectedButton === 0 ? 'cursor' : ''}`}
+            className={`mp-entry-btn mp-entry-play ${selectedButton === 0 ? 'cursor blink' : ''}`}
             onClick={handlePlay}
           >
             <span className="mp-entry-icon">🎮</span>
@@ -107,7 +133,7 @@ function MatchingPairsEntry() {
           </button>
 
           <button
-            className={`mp-entry-btn mp-entry-tutorial ${selectedButton === 1 ? 'cursor' : ''}`}
+            className={`mp-entry-btn mp-entry-tutorial ${selectedButton === 1 ? 'cursor blink' : ''}`}
             onClick={handleTutorial}
           >
             <span className="mp-entry-icon">❓</span>
