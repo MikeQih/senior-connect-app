@@ -6,7 +6,7 @@ import './TutorialMatchingPairs.css';
 
 function TutorialMatchingPairs() {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 4;
+  const totalPages = 9;
   const navigate = useNavigate();
   const { uiModel } = useUIModel();
   const { lastAction, clearAction } = useController();
