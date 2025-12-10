@@ -173,11 +173,10 @@
   left: 0;
   right: 0;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   gap: 2rem;
   padding: 1.5rem;
-  background: rgba(252, 217, 123, 0.95);
   z-index: 10;
 }
 
