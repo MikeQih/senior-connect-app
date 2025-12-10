@@ -9,7 +9,7 @@ function Home() {
   const navigate = useNavigate();
 
   function handleGetStarted() {
-    navigate("/login");
+    navigate("/dashboard");
   }
 
   useEffect(() => {
