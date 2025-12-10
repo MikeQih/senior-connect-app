@@ -12,7 +12,7 @@ const initialVoiceMessages = {
   ],
   Alice: [
     { sender: 'Alice', duration: '0:05', time: '09:15 AM' },
-    { sender: 'You', duration: '0:08', time: '09:18 AM' },
+    // { sender: 'You', duration: '0:08', time: '09:18 AM' },
   ],
   Ying: [
     { sender: 'Ying', duration: '0:10', time: '02:45 PM' },
@@ -28,7 +28,7 @@ function Chat() {
   // view: contact selection (big cards) OR conversation
   const [view, setView] = useState('selection'); // 'selection' | 'conversation'
   const [highlightedContact, setHighlightedContact] = useState('Alice');
-  const [selectedContact, setSelectedContact] = useState(null); // Ying | Alice | Ben | null
+  const [selectedContact, setSelectedContact] = useState(null); // Ying | Li Wei | Ben | null
 
   // voice messages state – local only, resets when page changes
   const [messagesByContact, setMessagesByContact] = useState(initialVoiceMessages);
@@ -42,8 +42,8 @@ function Chat() {
   const [rotation, setRotation] = useState(0); // for ModelR choose icon
 
   const contacts = [
-    { name: 'Ying', image: '/Resources/ModelD/Ying.png' },
     { name: 'Alice', image: '/Resources/ModelD/Alice.png' },
+    { name: 'Ying', image: '/Resources/ModelD/Ying.png' },
     { name: 'Ben', image: '/Resources/ModelD/Bob.png' }, // Ben uses Bob-style avatar in assets
   ];
 
