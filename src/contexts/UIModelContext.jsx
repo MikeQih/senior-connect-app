@@ -12,7 +12,7 @@ export const useUIModel = () => {
 
 export const UIModelProvider = ({ children }) => {
   const [uiModel, setUIModel] = useState(() => {
-    return localStorage.getItem("uiModel") || "ModelD";
+    return localStorage.getItem("uiModel") || "ModelR";
   });
 
   // Save when changed
