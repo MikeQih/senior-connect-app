@@ -1,20 +1,24 @@
 /* Global app styles */
-#root {
-  height: 100vh;
-  width: 100vw;
+.app-layout {
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .top-screen {
-  height: 60vh;   
+  height: 60%;
   overflow: auto;
+  background: white;
+  flex-shrink: 0;
 }
 
 .bottom-screen {
-  height: 40vh; 
+  height: 40%;
   background: #fcd97b;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 }
