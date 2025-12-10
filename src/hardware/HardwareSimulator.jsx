@@ -136,9 +136,9 @@ export default function HardwareSimulator() {
       }
 
       // ACTION BUTTONS (A / B) — always active
-      if (e.key === "a" || e.key === "A") {
+      if (e.key === "a" || e.key === "A" || e.key === "Enter") {
         action = "A";
-      } else if (e.key === "b" || e.key === "B") {
+      } else if (e.key === "b" || e.key === "B" || e.key === "Backspace") {
         action = "B";
       }
 
