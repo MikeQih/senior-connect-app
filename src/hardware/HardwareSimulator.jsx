@@ -99,7 +99,7 @@ export default function HardwareSimulator() {
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", onEnd);
     };
-  }, [uiModel, sendAction, sendKnobRotation]);
+  }, [uiModel]);
 
   /* ---------- KEYBOARD CONTROLS (DPAD + A/B) ---------- */
   useEffect(() => {
