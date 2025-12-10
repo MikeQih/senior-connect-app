@@ -1,7 +1,7 @@
 .hardware-container {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;
+  justify-content: space-between;
+  align-items: stretch; /* allow children to use full height */
   width: 100%;
   padding: 20px;
   height: 100%;
@@ -9,29 +9,46 @@
   padding-right: 25%;
 }
 
+/* Left half: container for the D-pad area */
 .dpad-container {
   position: relative;
-  width: 500px;   
-  height: 500px;
+  flex: 0 0 50%;       /* left half of hardware-container */
+  height: 100%;        /* full height of hardware-container */
+  padding: 2%;
+  display: flex;
+  justify-content: flex-end; /* right-align inner square */
+  align-items: center;       /* vertically center inner square */
+}
+
+/* Inner square that holds the actual D-pad graphics and zones */
+.dpad-square {
+  position: relative;
+  height: 100%;        /* use full height of dpad-container */
+  aspect-ratio: 1 / 1; /* keep this square */
+  max-height: 100%;
+  max-width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 30%;
 }
 
+/* D-pad base image, centered with 20px padding inside the square */
 .dpad-base {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  transform: translate(-50%, -50%);
   object-fit: contain;
-  transform: translate(0, 0);
   user-select: none;
-  pointer-events: none; 
+  pointer-events: none;
+
+  width: calc(100% - 40px);  /* 20px padding on each side */
+  height: calc(100% - 40px);
 }
 
+/* Knob graphics (if used inside .dpad-square) */
 .knob-base {
   position: absolute;
-  width: 800px; 
+  width: 800px;
   height: 800px;
   object-fit: contain;
   user-select: none;
@@ -48,11 +65,11 @@
   transform: translate(-50%, -50%);
   background: rgba(255, 0, 0, 0); /* invisible */
   cursor: grab;
-  z-index: 99999;   /* <-- IMPORTANT */
-  pointer-events: auto; /* <-- IMPORTANT */
+  z-index: 99999;
+  pointer-events: auto;
 }
 
-
+/* Zones now scale with the D-pad square: each is 1/3 width and height */
 .zone {
   position: absolute;
   background: rgba(255, 0, 0, 0);
@@ -61,49 +78,55 @@
   z-index: 9999;
 }
 
+/* Up: top middle, 1/3 x 1/3 of D-pad */
 .zone.up {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 180px;
-  height: 180px;
+  width: 33.333%;
+  height: 33.333%;
 }
 
+/* Down: bottom middle */
 .zone.down {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 180px;
-  height: 180px;
+  width: 33.333%;
+  height: 33.333%;
 }
 
+/* Left: center left */
 .zone.left {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 180px;
-  height: 180px;
+  width: 33.333%;
+  height: 33.333%;
 }
 
+/* Right: center right */
 .zone.right {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 180px;
-  height: 180px;
+  width: 33.333%;
+  height: 33.333%;
 }
 
+/* A/B button container on the right side */
 .ab-container {
+  flex: 1; /* take remaining space (roughly right half) */
   display: flex;
   flex-direction: row;
-  gap: 100px; 
+  gap: 10%;
   align-items: center;
+  justify-content: center;
 }
 
 .button-a,
 .button-b {
-  width: 200px; 
-  height: 200px;
+  height: 60%;
   object-fit: contain;
   touch-action: none;
 }

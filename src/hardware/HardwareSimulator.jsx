@@ -1,8 +1,8 @@
 import "./Hardware.css";
-import dpadImage from "../assets/hardware/dpad.png";
+import dpadImage from "../assets/hardware/DPAD.svg";
 import knobImage from "../assets/hardware/knob.png";
-import aButtonImage from "../assets/hardware/abutton.png";
-import bButtonImage from "../assets/hardware/bButton.png";
+import aButtonImage from "../assets/hardware/A_btn.svg";
+import bButtonImage from "../assets/hardware/B_btn.svg";
 import { useController } from "./ControllerContext";
 import { useUIModel } from "../contexts/UIModelContext";
 import { useState, useEffect } from "react";
@@ -106,34 +106,36 @@ export default function HardwareSimulator() {
   return (
     <div className="hardware-container">
       <div className="dpad-container">
-        {/* DPAD/KNOB */}
-        <img
-          src={controlImage}
-          id="knob-image"
-          className={uiModel === "ModelR" ? "knob-base" : "dpad-base"}
-          style={{
-            transform: uiModel === "ModelR" ? `rotate(${rotation}deg)` : "none"
-          }}
-        />
-        {/* DPAD BUTTONS */}
-        {uiModel === "ModelD" && (
-          <>
-            <button className="zone up" onClick={() => handle("UP")} />
-            <button className="zone down" onClick={() => handle("DOWN")} />
-            <button className="zone left" onClick={() => handle("LEFT")} />
-            <button className="zone right" onClick={() => handle("RIGHT")} />
-          </>
-        )}
-        {/* KNOB HITBOX */}
-        {uiModel === "ModelR" && (
-          <div className="knob-hitbox"></div>
-        )}
+        <div className="dpad-square">
+          {/* DPAD/KNOB */}
+          <img
+            src={controlImage}
+            id="knob-image"
+            className={uiModel === "ModelR" ? "knob-base" : "dpad-base"}
+            style={{
+              transform: uiModel === "ModelR" ? `rotate(${rotation}deg)` : "none"
+            }}
+          />
+          {/* DPAD BUTTONS */}
+          {uiModel === "ModelD" && (
+            <>
+              <button className="zone up" onClick={() => handle("UP")} />
+              <button className="zone down" onClick={() => handle("DOWN")} />
+              <button className="zone left" onClick={() => handle("LEFT")} />
+              <button className="zone right" onClick={() => handle("RIGHT")} />
+            </>
+          )}
+          {/* KNOB HITBOX */}
+          {uiModel === "ModelR" && (
+            <div className="knob-hitbox"></div>
+          )}
+        </div>
       </div>
 
       <div className="ab-container">
         <img src={aButtonImage} className="button-a" onClick={() => handle("A")} />
         <img src={bButtonImage} className="button-b" onClick={() => handle("B")} />
       </div>
-    </div>
+    </div >
   );
 }
