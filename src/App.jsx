@@ -26,6 +26,7 @@ function App() {
 
             {/* Page content */}
             <div className="top-screen">
+              <div className = "ipad-ratio">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/game/matchingpairs/tutorial" element={<TutorialMatchingPairs />} />
                 <Route path="/game/matchingpairs" element={<MatchingPairs />} />
               </Routes>
+              </div>
             </div>
 
             {/* Hardware Simulation */}
