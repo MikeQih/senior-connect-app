@@ -12,18 +12,18 @@
 /* Left half: container for the D-pad area */
 .dpad-container {
   position: relative;
-  flex: 0 0 50%;       /* left half of hardware-container */
-  height: 100%;        /* full height of hardware-container */
+  flex: 0 0 50%;       
+  height: 100%;        
   display: flex;
-  justify-content: flex-end; /* right-align inner square */
-  align-items: center;       /* vertically center inner square */
+  justify-content: flex-end;
+  align-items: center;      
 }
 
 /* Inner square that holds the actual D-pad graphics and zones */
 .dpad-square {
   position: relative;
-  height: 100%;        /* use full height of dpad-container */
-  aspect-ratio: 1 / 1; /* keep this square */
+  height: 100%;     
+  aspect-ratio: 1 / 1; 
   max-height: 100%;
   max-width: 100%;
 
@@ -40,7 +40,7 @@
   user-select: none;
   pointer-events: none;
 
-  width: calc(100% - 40px);  /* 20px padding on each side */
+  width: calc(100% - 40px);  
   height: calc(100% - 40px);
 }
 
@@ -62,7 +62,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 0, 0, 0); /* invisible */
+  background: rgba(255, 0, 0, 0); 
   cursor: grab;
   z-index: 99999;
   pointer-events: auto;
@@ -115,7 +115,7 @@
 
 /* A/B button container on the right side */
 .ab-container {
-  flex: 1; /* take remaining space (roughly right half) */
+  flex: 1; 
   display: flex;
   flex-direction: row;
   gap: 10%;
