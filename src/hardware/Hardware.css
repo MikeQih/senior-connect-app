@@ -14,7 +14,6 @@
   position: relative;
   flex: 0 0 50%;       /* left half of hardware-container */
   height: 100%;        /* full height of hardware-container */
-  padding: 2%;
   display: flex;
   justify-content: flex-end; /* right-align inner square */
   align-items: center;       /* vertically center inner square */
