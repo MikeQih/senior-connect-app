@@ -1,35 +1,58 @@
-/* Global app styles */
-#root {
+/* Make the app fill the viewport */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #fcd97b;
+}
+
+/* App layout: column – top (screen) and bottom (hardware) */
+.app-layout {
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
 }
 
+/* TOP SCREEN (where routes render) */
 .top-screen {
   height: 70vh;
-  overflow: auto;
-  background: #fcd97b;
   display: flex;
-  justify-content: center;  /* center horizontally */
-  align-items: center;      /* center vertically */
+  justify-content: center;
+  align-items: center; 
+  overflow: hidden;
 }
 
+/* FIXED: ipad-ratio will NEVER exceed the height of top-screen */
+.ipad-ratio {
+  position: relative;
+
+  /* Height is the limiting factor */
+  height: 100%;              /* fill the 70vh container */
+  aspect-ratio: 4 / 3;       /* width adjusts automatically */
+
+  /* Prevent horizontal overflow */
+  max-width: 100%;
+
+  background: #fdfdfd;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+
+/* Make any top-level page components fill the screen space */
+.ipad-ratio > * {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* BOTTOM SCREEN (hardware) */
 .bottom-screen {
   height: 30vh;
   background: #fcd97b;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* 4:3 centered display area */
-.ipad-ratio {
-  position: relative;
-  border: orange solid 2px;  /* optional: helps visualize */
-  aspect-ratio: 4 / 3;   /* clean modern way */
-  width: 100%;           /* max width available */
-  max-width: 90vh;       /* ensures height fits (4:3 based on top-screen height) */
-
-  background: #fff;      /* optional: helps visualize */
 }

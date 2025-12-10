@@ -1,7 +1,7 @@
 .mp-entry-container {
   width: 100%;
   height: 100%;
-  background: #FCD97B;
+  background: #FFBA7E;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,35 +10,39 @@
   overflow: hidden;
 }
 
+/* Main content area */
 .mp-entry-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3rem;
-  padding: 2rem;
+  justify-content: flex-start;
+  gap: clamp(1rem, 3vh, 2.5rem);
+  padding: clamp(1rem, 3vh, 2rem);
   z-index: 1;
 }
 
+/* Title */
 .mp-entry-title {
-  font-size: 4rem;
+  font-size: clamp(1.8rem, 3.8vh, 2.6rem);
   font-weight: 900;
   color: #1a1a2e;
   margin: 0;
   text-align: center;
 }
 
+/* Cards row */
 .mp-entry-cards {
   display: flex;
-  gap: 1.5rem;
+  gap: clamp(0.8rem, 2vh, 1.5rem);
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
+  margin: clamp(0.5rem, 1.5vh, 1rem) 0;
 }
 
+/* Individual card */
 .mp-entry-card {
-  width: 120px;
-  height: 160px;
+  width: clamp(70px, 10vh, 110px);
+  height: clamp(95px, 15vh, 160px);
   perspective: 1000px;
   cursor: pointer;
 }
@@ -82,67 +86,66 @@
 }
 
 .mp-entry-card:hover .card-inner {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .mp-entry-card.flipped:hover .card-inner {
-  transform: rotateY(180deg) scale(1.05);
+  transform: rotateY(180deg) scale(1.03);
 }
 
+/* Buttons block */
 .mp-entry-buttons {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(0.8rem, 2.2vh, 1.6rem);
   align-items: center;
 }
 
+/* Base button style */
 .mp-entry-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  padding: 1.2rem 3rem;
-  font-size: 1.8rem;
+  gap: 0.8rem;
+
+  padding: clamp(0.8rem, 2.5vh, 1.2rem)
+           clamp(1.8rem, 4vh, 3rem);
+
+  font-size: clamp(1.1rem, 2.6vh, 1.6rem);
   font-weight: 700;
+
   border: 3px solid #1a1a2e;
   border-radius: 50px;
   cursor: pointer;
+
   background: white;
   color: #1a1a2e;
-  min-width: 350px;
+
+  min-width: min(90%, 360px);
+  text-align: center;
 }
 
-.mp-entry-play {
-  border-style: solid;
-  border-width: 3px;
-  border-color: #1a1a2e;
-}
-
-.mp-entry-play:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(45, 106, 79, 0.3);
-}
-
+.mp-entry-play,
 .mp-entry-tutorial {
   border-style: solid;
-  border-width: 3px;
-  border-color: #1a1a2e;
 }
 
+.mp-entry-play:hover,
 .mp-entry-tutorial:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Icon + text inside button */
 .mp-entry-icon {
-  font-size: 2rem;
+  font-size: clamp(1.3rem, 3vh, 1.7rem);
 }
 
 .mp-entry-btn-text {
-  font-size: 1.8rem;
+  font-size: clamp(1.1rem, 2.6vh, 1.6rem);
 }
 
-/* Blinking animation for background and border */
+/* Blinking animation for cursor-highlighted button */
 @keyframes blinkButton {
   0%, 100% {
     background-color: #E8824A;
@@ -159,101 +162,67 @@
 }
 
 .mp-entry-btn.cursor {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .mp-entry-btn.blink {
   animation: blinkButton 1s ease-in-out infinite;
 }
 
-/* Control hints */
+/* Control hints – bottom, compact */
 .control-hints {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
+  bottom: 0;
+
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
   align-items: center;
-  gap: 2rem;
-  padding: 1.5rem;
+
+  gap: clamp(0.6rem, 1.4vh, 1.2rem);
+  padding: clamp(0.5rem, 1.4vh, 1rem) clamp(1rem, 2vh, 1.5rem);
+
   z-index: 10;
 }
 
 .hint-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .control-icon {
-  width: 32px;
-  height: 32px;
+  width: clamp(20px, 3vh, 24px);
+  height: clamp(20px, 3vh, 24px);
   object-fit: contain;
 }
 
 .control-btn {
-  width: 32px;
-  height: 32px;
+  width: clamp(22px, 3vh, 26px);
+  height: clamp(22px, 3vh, 26px);
   background: rgba(200, 200, 200, 0.8);
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1vh, 0.85rem);
   color: #1a1a2e;
 }
 
 .hint-text {
-  font-size: 0.85rem;
+  font-size: clamp(0.6rem, 1.2vh, 0.8rem);
   font-weight: 600;
   color: #1a1a2e;
   text-transform: uppercase;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .mp-entry-title {
-    font-size: 3rem;
-  }
-
-  .mp-entry-card {
-    width: 90px;
-    height: 120px;
-  }
-
-  .mp-entry-btn {
-    min-width: 280px;
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
-  }
-
-  .mp-entry-icon {
-    font-size: 1.5rem;
-  }
-
-  .mp-entry-btn-text {
-    font-size: 1.5rem;
-  }
-}
-
+/* Extra small screens tweaks if needed */
 @media (max-width: 480px) {
-  .mp-entry-title {
-    font-size: 2.5rem;
-  }
-
-  .mp-entry-cards {
-    gap: 1rem;
-  }
-
-  .mp-entry-card {
-    width: 70px;
-    height: 95px;
-  }
-
-  .mp-entry-btn {
-    min-width: 240px;
-    font-size: 1.3rem;
+  .mp-entry-content {
+    gap: 1.5rem;
   }
 }

@@ -1,6 +1,8 @@
 .home-container {
+  width: 100%;
   height: 100%;
-  min-height: 0%;
+  min-height: 0;
+
   background: #FCD97B;
   display: flex;
   justify-content: center;
@@ -9,14 +11,16 @@
   position: relative;
 }
 
+
+
 /* Decorative ellipses */
 .home-container::before {
   content: '';
   position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 280px;
-  height: 280px;
+  top: -10%;
+  left: -10%;
+  width: 35%;
+  height: 35%;
   background: radial-gradient(circle,
     rgba(255, 120, 70, 0.6) 0%,
     rgba(250, 130, 90, 0.45) 40%,
@@ -28,10 +32,10 @@
 .home-container::after {
   content: '';
   position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 380px;
-  height: 380px;
+  bottom: -15%;
+  left: -15%;
+  width: 45%;
+  height: 45%;
   background: radial-gradient(circle,
     rgba(220, 100, 60, 0.55) 0%,
     rgba(235, 110, 70, 0.4) 40%,
@@ -42,12 +46,15 @@
 
 .content-wrapper {
   text-align: center;
-  padding: 2rem;
-  max-width: 800px;
-  width: 100%;
+  padding: 2vh;           /* was 2rem */
+  width: 80%;
+  max-width: 900px;       /* upper bound for big screens */
+  max-height: 100%;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
 }
+
 
 .logo-container {
   margin-bottom: 2rem;
@@ -57,11 +64,12 @@
 }
 
 .logo {
-  max-width: 400px;
-  width: 90%;
+  width: 50%;                      /* relative to content wrapper */
+  max-width: 260px;                /* cap on large screens */
   height: auto;
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
 }
+
 
 .welcome-text {
   margin-bottom: 3rem;
@@ -71,7 +79,7 @@
 }
 
 .welcome-text h1 {
-  font-size: 2.5rem;
+  font-size: clamp(1.4rem, 3vh, 2.5rem);
   font-weight: 700;
   margin-bottom: 1rem;
   color: #1a1a2e;
@@ -79,10 +87,11 @@
 }
 
 .welcome-text p {
-  font-size: 1.3rem;
+  font-size: clamp(0.9rem, 2vh, 1.3rem);
   color: #2d2d44;
   font-weight: 500;
 }
+
 
 .button-container {
   display: flex;
@@ -95,8 +104,8 @@
 }
 
 button {
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: clamp(0.6rem, 1.5vh, 1rem) clamp(1.4rem, 3vh, 2.5rem);
+  font-size: clamp(0.9rem, 2vh, 1.1rem);
   font-weight: 600;
   border: none;
   border-radius: 50px;
@@ -104,6 +113,7 @@ button {
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
 
 .btn-primary {
   background-color: #1a1a2e;

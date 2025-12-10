@@ -74,9 +74,8 @@ function Dashboard() {
         </div>
 
         <div className="control-hints">
-          <div className="hint-item"><img src="/Resources/ModelD/Arrows.png" className="control-icon" /><span>CHOOSE</span></div>
+          <div className="hint-item"><img src="src/assets/hardware/DPAD.svg" className="control-icon" /><span>CHOOSE</span></div>
           <div className="hint-item"><span className="control-btn" onClick={handleConfirm}>A</span><span>CONFIRM</span></div>
-          <div className="hint-item"><span className="control-btn">B</span><span>BACK</span></div>
         </div>
       </div>
     );
@@ -101,16 +100,12 @@ function Dashboard() {
 
       <div className="control-hints">
         <div className="hint-item">
-          <img src="/Resources/ModelR/ChooseIcon.png" className="control-icon" />
+          <img src="src/assets/hardware/DPAD.svg" className="control-icon" />
           <span>CHOOSE</span>
         </div>
         <div className="hint-item">
           <span className="control-btn" onClick={handleConfirm}>A</span>
           <span>CONFIRM</span>
-        </div>
-        <div className="hint-item">
-          <span className="control-btn">B</span>
-          <span>BACK</span>
         </div>
       </div>
     </div>

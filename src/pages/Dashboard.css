@@ -1,6 +1,9 @@
+/* Full-screen dashboard inside ipad-ratio */
 .dashboard-container {
+  width: 100%;
   height: 100%;
-  min-height: 0%;
+  min-height: 0;
+
   background: #FCD97B;
   display: flex;
   flex-direction: column;
@@ -8,14 +11,14 @@
   overflow: hidden;
 }
 
-/* Decorative ellipses - same as other pages */
+/* Decorative ellipses – scale with container */
 .dashboard-container::before {
   content: '';
   position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 280px;
-  height: 280px;
+  top: -12%;
+  left: -12%;
+  width: 32%;
+  height: 32%;
   background: radial-gradient(circle,
     rgba(255, 120, 70, 0.6) 0%,
     rgba(250, 130, 90, 0.45) 40%,
@@ -27,10 +30,10 @@
 .dashboard-container::after {
   content: '';
   position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 380px;
-  height: 380px;
+  bottom: -18%;
+  left: -18%;
+  width: 42%;
+  height: 42%;
   background: radial-gradient(circle,
     rgba(220, 100, 60, 0.55) 0%,
     rgba(235, 110, 70, 0.4) 40%,
@@ -39,15 +42,16 @@
   border-radius: 50%;
 }
 
-/* Main content */
+/* Main content area */
 .dashboard-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
-  padding: 2rem;
+
+  gap: clamp(1rem, 3vh, 1.8rem);
+  padding: 2vh;
   position: relative;
   z-index: 1;
 }
@@ -55,9 +59,8 @@
 /* ModelR - Click Wheel Wrapper */
 .click-wheel-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 1;
+  width: min(70%, 320px);   /* scale with screen, but cap size */
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,16 +94,20 @@
   }
 }
 
+/* Menu buttons (Model D) */
 .menu-btn {
   width: 100%;
   max-width: 320px;
-  padding: 1.2rem 2rem;
+  padding: clamp(0.8rem, 2.2vh, 1.2rem) clamp(1.2rem, 3vh, 2rem);
+
   background: rgba(255, 255, 255, 0.8);
   border: 2px solid transparent;
   border-radius: 50px;
-  font-size: 1.3rem;
+
+  font-size: clamp(1rem, 2.3vh, 1.3rem);
   font-weight: 600;
   color: #1a1a2e;
+
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -123,18 +130,18 @@
 }
 
 .btn-icon {
-  width: 32px;
-  height: 32px;
+  width: clamp(24px, 4vh, 32px);
+  height: clamp(24px, 4vh, 32px);
   object-fit: contain;
   flex-shrink: 0;
   margin-right: 0.5rem;
 }
 
 .btn-text {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2.3vh, 1.3rem);
   flex: 1;
   text-align: center;
-  margin-right: 32px;
+  margin-right: clamp(24px, 3vh, 32px);
 }
 
 /* Control hints */
@@ -142,86 +149,48 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 1.5rem;
+  gap: clamp(0.6rem, 1.4vh, 1.4rem);
+
+  padding: clamp(0.6rem, 1.4vh, 1.2rem);
   position: relative;
   z-index: 10;
-  margin-bottom: 1rem;
+
+  margin-top: clamp(0.5rem, 1.5vh, 1rem);      /* NEW → moves lower */
+  margin-bottom: clamp(0.2rem, 1vh, 0.6rem);   /* NEW → reduces distance from bottom */
+
+  flex-wrap: wrap;
 }
 
 .hint-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .control-icon {
-  width: 32px;
-  height: 32px;
+  width: clamp(20px, 3vh, 26px);   /* NEW smaller */
+  height: clamp(20px, 3vh, 26px);
   object-fit: contain;
 }
 
 .control-btn {
-  width: 32px;
-  height: 32px;
+  width: clamp(22px, 3vh, 28px);   /* NEW smaller */
+  height: clamp(22px, 3vh, 28px);
   background: rgba(200, 200, 200, 0.8);
+
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1vh, 0.9rem); /* NEW smaller */
   color: #1a1a2e;
 }
 
 .hint-text {
-  font-size: 0.85rem;
+  font-size: clamp(0.6rem, 1.2vh, 0.8rem); /* NEW smaller */
   font-weight: 600;
   color: #1a1a2e;
   text-transform: uppercase;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .dashboard-content {
-    gap: 1.2rem;
-  }
-
-  .menu-btn {
-    max-width: 260px;
-    padding: 1rem 1.8rem;
-  }
-
-  .btn-text {
-    font-size: 1.2rem;
-  }
-
-  .control-hints {
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu-btn {
-    max-width: 240px;
-    padding: 0.9rem 1.5rem;
-  }
-
-  .btn-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .btn-text {
-    font-size: 1.1rem;
-  }
-
-  .control-hints {
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .hint-text {
-    font-size: 0.75rem;
-  }
 }

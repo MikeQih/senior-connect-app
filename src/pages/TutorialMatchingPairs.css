@@ -1,6 +1,8 @@
 .tutorial-mp-container {
+  width: 100%;
   height: 100%;
-  min-height: 100%;
+  min-height: 0;
+
   background: #FCD97B;
   display: flex;
   flex-direction: column;
@@ -8,19 +10,14 @@
   overflow: hidden;
 }
 
-/* Decorative ellipses */
+/* Decorative ellipses – scaled with percentages */
 .tutorial-mp-container::before {
   content: '';
   position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle,
-    rgba(255, 120, 70, 0.6) 0%,
-    rgba(250, 130, 90, 0.45) 40%,
-    rgba(255, 150, 110, 0.25) 70%,
-    transparent 100%);
+  top: -12%;
+  left: -12%;
+  width: 32%;
+  height: 32%;
   border-radius: 50%;
   z-index: 0;
 }
@@ -28,70 +25,81 @@
 .tutorial-mp-container::after {
   content: '';
   position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle,
-    rgba(220, 100, 60, 0.55) 0%,
-    rgba(235, 110, 70, 0.4) 40%,
-    rgba(250, 130, 85, 0.22) 70%,
-    transparent 100%);
+  bottom: -18%;
+  left: -18%;
+  width: 42%;
+  height: 42%;
   border-radius: 50%;
   z-index: 0;
 }
 
+/* MAIN CONTENT */
 .tutorial-mp-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+
+  padding: clamp(0.8rem, 2.5vh, 2rem);
   position: relative;
   z-index: 1;
-  gap: 2rem;
+
+  gap: clamp(0.8rem, 2vh, 1.6rem);
 }
 
+/* IMAGE – show the tutorial slide itself, no extra white frame */
 .tutorial-mp-image-wrapper {
-  max-width: 600px;
   width: 100%;
-  background: white;
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  max-width: min(70%, 960px);    /* smaller, more breathing room */
+  max-height: 55vh;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tutorial-mp-image {
   width: 100%;
   height: auto;
+  max-height: 100%;
+  object-fit: contain;
   display: block;
-  border-radius: 12px;
+  border-radius: 8px; /* subtle clean edge */
 }
 
+/* NAVIGATION ROW */
 .tutorial-mp-navigation {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: clamp(1.1rem, 2.6vh, 1.8rem);
+  margin-top: clamp(0.4rem, 1.2vh, 0.9rem);
 }
 
+/* Arrows */
 .nav-mp-arrow {
-  width: 60px;
-  height: 60px;
+  width: clamp(38px, 5.6vh, 50px);
+  height: clamp(38px, 5.6vh, 50px);
   border-radius: 50%;
   border: none;
   background: white;
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 2.4vh, 1.7rem);
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .nav-mp-arrow:hover:not(:disabled) {
-  transform: scale(1.1);
+  transform: scale(1.08);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -100,15 +108,18 @@
   cursor: not-allowed;
 }
 
+/* Page indicator pill */
 .page-mp-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.8rem;
+
+  font-size: clamp(1rem, 2.1vh, 1.35rem);
   font-weight: 700;
   color: #1a1a2e;
+
   background: white;
-  padding: 1rem 2rem;
+  padding: clamp(0.4rem, 1.1vh, 0.7rem) clamp(1.2rem, 3vw, 1.8rem);
   border-radius: 50px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -125,112 +136,88 @@
   color: #666;
 }
 
+/* START BUTTON */
 .start-mp-game-btn {
-  margin-top: 2rem;
-  padding: 1rem 3rem;
-  font-size: 1.5rem;
+  margin-top: clamp(0.7rem, 1.8vh, 1.2rem);
+  padding: clamp(0.8rem, 2.2vh, 1.1rem) clamp(2rem, 5vw, 3rem);
+
+  font-size: clamp(1.05rem, 2.3vh, 1.45rem);
   font-weight: 700;
+
   background: #E8824A;
   color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
+
   box-shadow: 0 6px 20px rgba(232, 130, 74, 0.4);
   transition: all 0.3s;
 }
 
 .start-mp-game-btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
   box-shadow: 0 8px 25px rgba(232, 130, 74, 0.5);
 }
 
-/* Control hints */
-.control-mp-hints {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  padding: 1.5rem;
-  position: relative;
-  z-index: 10;
-  margin-bottom: 1rem;
-}
-
-.hint-mp-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.control-mp-icon {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
-.control-mp-btn {
-  width: 32px;
-  height: 32px;
-  background: rgba(200, 200, 200, 0.8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1a1a2e;
-  cursor: pointer;
-}
-
-.hint-mp-text {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #1a1a2e;
-  text-transform: uppercase;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .tutorial-mp-image-wrapper {
-    max-width: 100%;
-    padding: 1rem;
-  }
-
-  .tutorial-mp-navigation {
-    gap: 1.5rem;
-  }
-
-  .nav-mp-arrow {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-  }
-
-  .page-mp-indicator {
-    font-size: 1.5rem;
-    padding: 0.8rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tutorial-mp-content {
-    padding: 1rem;
-  }
-
-  .nav-mp-arrow {
-    width: 45px;
-    height: 45px;
-  }
-
-  .page-mp-indicator {
-    font-size: 1.2rem;
-    padding: 0.6rem 1.2rem;
-  }
-}
-
+/* Hardware cursor highlight */
 .cursor {
   outline: 4px solid orange;
   outline-offset: 3px;
   border-radius: 50px;
   background-color: #E8824A;
+}
+
+/* Control hints — positioned bottom-left like other screens */
+.control-mp-hints {
+  position: absolute;
+  bottom: 1.8vh;
+  left: 1.8vw;
+
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 1.8vh, 1.4rem);
+
+  padding: 0;
+  margin: 0;
+
+  z-index: 20;
+}
+
+/* Each hint block (icon + text) */
+.hint-mp-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Icon size scales with screen */
+.control-mp-icon {
+  width: clamp(20px, 2.4vh, 26px);
+  height: clamp(20px, 2.4vh, 26px);
+  object-fit: contain;
+}
+
+/* A / B circle buttons */
+.control-mp-btn {
+  width: clamp(22px, 2.6vh, 28px);
+  height: clamp(22px, 2.6vh, 28px);
+
+  background: rgba(200, 200, 200, 0.85);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: clamp(0.75rem, 1.5vh, 1rem);
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* Text labels */
+.hint-mp-text {
+  font-size: clamp(0.75rem, 1.4vh, 1rem);
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
 }

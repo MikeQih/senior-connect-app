@@ -1,7 +1,7 @@
 .mp-container {
   width: 100%;
   height: 100%;
-  background: #FCD97B;
+  background: #FFBA7E;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,47 +9,65 @@
   position: relative;
 }
 
+/* Main content fills the iPad screen */
 .mp-content {
   width: 100%;
   height: 100%;
-  padding-top: 1rem;
+  box-sizing: border-box;
+
+  padding: clamp(0.6rem, 2vh, 1.5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* When a modal is open, blur underlying content */
 .blurred {
   filter: blur(4px);
   pointer-events: none;
 }
 
+/* Header: level + stats */
 .mp-header {
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.4rem, 1.4vh, 0.8rem);
   text-align: center;
-  font-size: 2.4rem;   
 }
 
+.mp-header h1 {
+  font-size: clamp(1.2rem, 2.8vh, 1.9rem);
+  margin: 0 0 0.2rem;
+}
+
+.mp-header p {
+  font-size: clamp(0.85rem, 1.8vh, 1.1rem);
+  margin: 0;
+}
+
+/* Grid wrapper takes remaining vertical space */
 .mp-grid-wrapper {
+  flex: 1;                        /* instead of fixed calc(100% - 180px) */
   width: 100%;
-  height: calc(100% - 180px);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* The grid itself */
 .mp-grid {
   display: grid;
   justify-content: center;
   align-content: center;
-  gap: 1rem;
+  gap: clamp(0.4rem, 1.2vh, 1rem);
   list-style: none;
 }
 
+/* Cards */
 .mp-card {
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   transition: transform 0.2s;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .mp-card.open {
@@ -60,6 +78,7 @@
   opacity: 0.7;
 }
 
+/* Hardware cursor highlight */
 .mp-card.cursor {
   outline: 5px solid orange;
   outline-offset: -5px;
@@ -68,17 +87,19 @@
   background-color: #E8824A;
 }
 
+/* Restart button (if you keep it visible somewhere) */
 .mp-restart {
-  margin-top: 1rem;
-  padding: 0.8rem 2rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1.6rem;
   background: #E8824A;
   color: white;
   border-radius: 8px;
   border: none;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 1.8vh, 1.1rem);
   cursor: pointer;
 }
 
+/* MODALS (win + exit) */
 .mp-modal-overlay {
   position: absolute;
   inset: 0;
@@ -92,41 +113,43 @@
 
 .mp-modal {
   background: #fdf3de;
-  padding: 4vh 4vw;
+  padding: clamp(1.2rem, 3vh, 2rem) clamp(1.2rem, 4vw, 2.5rem);
   border-radius: 22px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  width: min(60vw, 70vh); 
+  width: min(80vw, 70vh);
   max-width: 900px;
   text-align: center;
   border: 4px solid #1f2a3c;
 }
 
 .mp-modal h2 {
-  margin-bottom: 1.5vh;
-  font-size: 6vh;     
+  margin-bottom: clamp(0.6rem, 1.8vh, 1.1rem);
+  font-size: clamp(1.5rem, 4vh, 2.4rem);
 }
 
 .mp-modal p {
-  margin: 1vh 0;
-  font-size: 4vh;
+  margin: clamp(0.4rem, 1.2vh, 0.8rem) 0;
+  font-size: clamp(1rem, 2.4vh, 1.4rem);
 }
 
+/* Modal buttons */
 .mp-modal-buttons {
-  margin-top: 3vh;
+  margin-top: clamp(1rem, 2.8vh, 1.6rem);
   display: flex;
   flex-direction: column;
-  gap: 1.5vh;
+  gap: clamp(0.7rem, 2vh, 1.1rem);
 }
 
 .mp-modal-buttons button {
-  padding: 1.8vh 2.5vw;
+  padding: clamp(0.7rem, 2vh, 1.1rem) clamp(1.4rem, 3vw, 2.2rem);
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  font-size: 2.5vh;
+  font-size: clamp(0.95rem, 2.3vh, 1.3rem);
   font-weight: 800;
 }
 
+/* Secondary buttons */
 .mp-modal-buttons button:not(.primary) {
   background: #ffffff;
   color: #1f2a3c;
@@ -137,6 +160,7 @@
   background: #ffb94a;
 }
 
+/* Hardware cursor highlighting modal options */
 .mp-modal button.cursor {
   outline: 4px solid orange;
   outline-offset: 2px;

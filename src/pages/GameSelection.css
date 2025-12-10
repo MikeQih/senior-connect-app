@@ -1,6 +1,9 @@
+/* Full-screen inside ipad-ratio */
 .game-selection-container {
+  width: 100%;
   height: 100%;
-  min-height: 100%;
+  min-height: 0;
+
   background: #FCD97B;
   display: flex;
   flex-direction: column;
@@ -8,14 +11,14 @@
   overflow: hidden;
 }
 
-/* Decorative ellipses */
+/* Decorative ellipses – scaled */
 .game-selection-container::before {
   content: '';
   position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 280px;
-  height: 280px;
+  top: -12%;
+  left: -12%;
+  width: 32%;
+  height: 32%;
   background: radial-gradient(circle,
     rgba(255, 120, 70, 0.6) 0%,
     rgba(250, 130, 90, 0.45) 40%,
@@ -28,10 +31,10 @@
 .game-selection-container::after {
   content: '';
   position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 380px;
-  height: 380px;
+  bottom: -18%;
+  left: -18%;
+  width: 42%;
+  height: 42%;
   background: radial-gradient(circle,
     rgba(220, 100, 60, 0.55) 0%,
     rgba(235, 110, 70, 0.4) 40%,
@@ -41,205 +44,163 @@
   z-index: 0;
 }
 
+/* Main layout */
 .game-selection-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 3rem 2rem 1rem;
+
+  justify-content: flex-start; /* was space-between */
+  gap: clamp(0.6rem, 1.8vh, 1.2rem);
+
+  padding: clamp(0.8rem, 2.2vh, 2rem)
+           clamp(0.8rem, 2.2vh, 1.6rem)
+           clamp(0.4rem, 1.5vh, 1.2rem);
+
   position: relative;
   z-index: 1;
 }
 
-/* Game Display Title */
+/* Title */
 .game-display-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.2rem, 2.8vh, 2rem);
   font-weight: 700;
   color: #1a1a2e;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(0.4rem, 1.2vh, 0.8rem);
   text-align: center;
 }
 
-/* Game Display */
+/* Big game preview */
 .game-display {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 100%;
-  max-width: 500px;
-  margin-bottom: 2rem;
+  max-width: min(60%, 360px); /* narrower */
+  max-height: 30vh;           /* compact height */
+  margin-bottom: clamp(0.4rem, 1.2vh, 0.8rem);
 }
 
 .game-display-image {
   width: 100%;
-  height: auto;
-  max-height: 400px;
+  height: 100%;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 16px;
 }
 
-/* Game Icons Row */
+/* Game icons row */
 .game-icons-row {
+  flex: 0 0 auto;
   display: flex;
-  gap: 2rem;
+  gap: clamp(0.6rem, 1.6vh, 1.4rem);
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.2rem, 0.8vh, 0.6rem);
+  flex-wrap: nowrap;
 }
 
+/* Game card */
 .game-icon-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: clamp(0.3rem, 1vh, 0.7rem);
+
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 1.5rem;
-  border-radius: 20px;
+  transition: all 0.25s ease;
+
+  padding: clamp(0.4rem, 1.2vh, 0.8rem);
+  border-radius: 16px;
+
   background: rgba(255, 255, 255, 0.4);
-  min-width: 140px;
+  min-width: clamp(80px, 17vw, 120px);
 }
 
 .game-icon-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.6);
 }
 
 .game-icon-card.selected {
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transform: scale(1.08); /* was 1.2 – less vertical growth */
 }
 
+/* Icon inside card */
 .game-icon-image {
-  width: 120px;
-  height: 120px;
+  width: clamp(60px, 10vh, 95px);
+  height: clamp(60px, 10vh, 95px);
   object-fit: contain;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .game-icon-card.selected .game-icon-image {
-  transform: scale(1.1);
+  transform: scale(1.04);
 }
 
+/* Label below icon */
 .game-icon-label {
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1.6vh, 0.95rem);
   font-weight: 700;
   color: #1a1a2e;
   text-align: center;
-  max-width: 150px;
+  max-width: clamp(80px, 20vw, 130px);
 }
 
-/* Control hints */
+/* Control hints – small and slightly lower */
 .control-hints {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 1.5rem;
+  gap: clamp(0.6rem, 1.4vh, 1.2rem);
+
+  padding: clamp(0.5rem, 1.4vh, 1rem);
   position: relative;
   z-index: 10;
-  margin-bottom: 1rem;
+
+  margin-top: clamp(0.3rem, 1vh, 0.8rem);
+  margin-bottom: clamp(0.1rem, 0.6vh, 0.4rem);
+
+  flex-wrap: wrap;
 }
 
 .hint-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .control-icon {
-  width: 32px;
-  height: 32px;
+  width: clamp(20px, 3vh, 24px);
+  height: clamp(20px, 3vh, 24px);
   object-fit: contain;
 }
 
 .control-btn {
-  width: 32px;
-  height: 32px;
+  width: clamp(22px, 3vh, 26px);
+  height: clamp(22px, 3vh, 26px);
   background: rgba(200, 200, 200, 0.8);
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 1vh, 0.85rem);
   color: #1a1a2e;
   cursor: pointer;
 }
 
 .hint-text {
-  font-size: 0.85rem;
+  font-size: clamp(0.6rem, 1.2vh, 0.8rem);
   font-weight: 600;
   color: #1a1a2e;
   text-transform: uppercase;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .game-display-title {
-    font-size: 2rem;
-  }
-
-  .game-display {
-    max-width: 400px;
-  }
-
-  .game-display-image {
-    max-height: 300px;
-  }
-
-  .game-icons-row {
-    gap: 1.5rem;
-  }
-
-  .game-icon-image {
-    width: 80px;
-    height: 80px;
-  }
-
-  .game-icon-label {
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-selection-content {
-    padding: 2rem 1rem 0.5rem;
-  }
-
-  .game-display-title {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-  }
-
-  .game-display {
-    max-width: 100%;
-  }
-
-  .game-display-image {
-    max-height: 250px;
-  }
-
-  .game-icons-row {
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .game-icon-card {
-    padding: 0.7rem;
-  }
-
-  .game-icon-image {
-    width: 70px;
-    height: 70px;
-  }
-
-  .game-icon-label {
-    font-size: 0.75rem;
-    max-width: 90px;
-  }
 }
