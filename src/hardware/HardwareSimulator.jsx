@@ -19,7 +19,7 @@ export default function HardwareSimulator() {
     if (debug) debug.innerText = `Pressed: ${action}`;
   }
 
-  // KNOB ROTATION
+  // KNOB ROTATION (ModelR)
   useEffect(() => {
     if (uiModel !== "ModelR") return;
 
@@ -37,7 +37,7 @@ export default function HardwareSimulator() {
       const cy = rect.top + rect.height / 2;
       const x = (e.touches?.[0]?.clientX ?? e.clientX) - cx;
       const y = (e.touches?.[0]?.clientY ?? e.clientY) - cy;
-      return Math.atan2(y, x) * 180 / Math.PI;
+      return (Math.atan2(y, x) * 180) / Math.PI;
     }
 
     function onStart(e) {
@@ -99,7 +99,60 @@ export default function HardwareSimulator() {
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", onEnd);
     };
-  }, [uiModel]);
+  }, [uiModel, sendAction, sendKnobRotation]);
+
+  /* ---------- KEYBOARD CONTROLS (DPAD + A/B) ---------- */
+  useEffect(() => {
+    function onKeyDown(e) {
+      let action = null;
+
+      // DPAD for ModelD only
+      if (uiModel === "ModelD") {
+        switch (e.key) {
+          case "ArrowUp":
+            action = "UP";
+            break;
+          case "ArrowDown":
+            action = "DOWN";
+            break;
+          case "ArrowLeft":
+            action = "LEFT";
+            break;
+          case "ArrowRight":
+            action = "RIGHT";
+            break;
+          default:
+            break;
+        }
+
+        if (action) {
+          e.preventDefault();
+          sendAction(action);
+
+          const debug = document.getElementById("debug-output");
+          if (debug) debug.innerText = `Pressed: ${action}`;
+          return;
+        }
+      }
+
+      // ACTION BUTTONS (A / B) — always active
+      if (e.key === "a" || e.key === "A") {
+        action = "A";
+      } else if (e.key === "b" || e.key === "B") {
+        action = "B";
+      }
+
+      if (action) {
+        sendAction(action);
+
+        const debug = document.getElementById("debug-output");
+        if (debug) debug.innerText = `Pressed: ${action}`;
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [uiModel, sendAction]);
 
   const controlImage = uiModel === "ModelR" ? knobImage : dpadImage;
 
@@ -107,16 +160,18 @@ export default function HardwareSimulator() {
     <div className="hardware-container">
       <div className="dpad-container">
         <div className="dpad-square">
-          {/* DPAD/KNOB */}
+          {/* DPAD / KNOB IMAGE */}
           <img
             src={controlImage}
             id="knob-image"
             className={uiModel === "ModelR" ? "knob-base" : "dpad-base"}
             style={{
-              transform: uiModel === "ModelR" ? `rotate(${rotation}deg)` : "none"
+              transform: uiModel === "ModelR" ? `rotate(${rotation}deg)` : "none",
             }}
+            alt="Control"
           />
-          {/* DPAD BUTTONS */}
+
+          {/* DPAD BUTTONS (click zones) */}
           {uiModel === "ModelD" && (
             <>
               <button className="zone up" onClick={() => handle("UP")} />
@@ -125,17 +180,26 @@ export default function HardwareSimulator() {
               <button className="zone right" onClick={() => handle("RIGHT")} />
             </>
           )}
-          {/* KNOB HITBOX */}
-          {uiModel === "ModelR" && (
-            <div className="knob-hitbox"></div>
-          )}
+
+          {/* KNOB HITBOX (for drag) */}
+          {uiModel === "ModelR" && <div className="knob-hitbox"></div>}
         </div>
       </div>
 
       <div className="ab-container">
-        <img src={aButtonImage} className="button-a" onClick={() => handle("A")} />
-        <img src={bButtonImage} className="button-b" onClick={() => handle("B")} />
+        <img
+          src={aButtonImage}
+          className="button-a"
+          onClick={() => handle("A")}
+          alt="A Button"
+        />
+        <img
+          src={bButtonImage}
+          className="button-b"
+          onClick={() => handle("B")}
+          alt="B Button"
+        />
       </div>
-    </div >
+    </div>
   );
 }

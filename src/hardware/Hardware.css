@@ -82,8 +82,8 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 33.333%;
-  height: 33.333%;
+  width: 35%;
+  height: 35%;
 }
 
 /* Down: bottom middle */
@@ -91,8 +91,8 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 33.333%;
-  height: 33.333%;
+  width: 35%;
+  height: 35%;
 }
 
 /* Left: center left */
@@ -100,8 +100,8 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 33.333%;
-  height: 33.333%;
+  width: 35%;
+  height: 35%;
 }
 
 /* Right: center right */
@@ -109,8 +109,8 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 33.333%;
-  height: 33.333%;
+  width: 35%;
+  height: 35%;
 }
 
 /* A/B button container on the right side */
