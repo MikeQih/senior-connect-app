@@ -2,23 +2,5 @@
 .app-layout {
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
-}
-
-.top-screen {
-  height: 60%;
-  overflow: auto;
-  background: white;
-  flex-shrink: 0;
-}
-
-.bottom-screen {
-  height: 40%;
-  background: #fcd97b;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
 }

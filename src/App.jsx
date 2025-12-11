@@ -14,37 +14,31 @@ import MatchingPairs from './pages/MatchingPairs'
 import TutorialMatchingPairs from './pages/TutorialMatchingPairs'
 import MatchingPairsEntry from './pages/MatchingPairsEntry'
 
-import HardwareSimulator from "./hardware/HardwareSimulator";
+import KeyboardController from "./hardware/KeyboardController";
 import './App.css'
 
 function App() {
   return (
     <UIModelProvider>
       <ControllerProvider>
+        <KeyboardController />
         <Router>
           <div className="app-layout">
 
             {/* Page content */}
-            <div className="top-screen">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/game/select" element={<GameSelection />} />
-                <Route path="/game/connect4/tutorial" element={<Tutorial />} />
-                <Route path="/game/connect4/play" element={<Connect4Game />} />
-                <Route path="/game/matchingpairs/entry" element={<MatchingPairsEntry />} />
-                <Route path="/game/matchingpairs/tutorial" element={<TutorialMatchingPairs />} />
-                <Route path="/game/matchingpairs" element={<MatchingPairs />} />
-              </Routes>
-            </div>
-
-            {/* Hardware Simulation */}
-            <div className="bottom-screen">
-              <HardwareSimulator />
-            </div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/game/select" element={<GameSelection />} />
+              <Route path="/game/connect4/tutorial" element={<Tutorial />} />
+              <Route path="/game/connect4/play" element={<Connect4Game />} />
+              <Route path="/game/matchingpairs/entry" element={<MatchingPairsEntry />} />
+              <Route path="/game/matchingpairs/tutorial" element={<TutorialMatchingPairs />} />
+              <Route path="/game/matchingpairs" element={<MatchingPairs />} />
+            </Routes>
 
           </div>
         </Router>
